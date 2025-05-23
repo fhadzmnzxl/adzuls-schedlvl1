@@ -6,30 +6,70 @@
     <title>Class Schedule SY 2025-2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #007bff;
-            --primary-light: #e6f2ff;
-            --secondary-color: #6c757d;
-            --light-bg: #f8f9fa;
-            --white-bg: #ffffff;
-            --dark-text: #212529;
-            --medium-text: #495057;
-            --border-color: #dee2e6;
-            --card-shadow: 0 2px 4px rgba(0,0,0,0.03);
-            --card-hover-shadow: 0 4px 8px rgba(0,0,0,0.06);
-            --accent-red: #e74c3c;
-            --font-family: 'Poppins', sans-serif;
+            --font-family: 'Roboto', sans-serif;
+
+            --light-primary-color: #1976D2; 
+            --light-primary-accent-gradient: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
+            --light-secondary-color: #616161;
+            --light-bg: #f5f5f5;
+            --light-card-bg: #ffffff;
+            --light-text-primary: #212121;
+            --light-text-secondary: #757575;
+            --light-border-color: #e0e0e0;
+            --light-card-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --light-hover-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            --light-accent-red: #D32F2F;
+
+            --dark-primary-color: #42A5F5;
+            --dark-primary-accent-gradient: linear-gradient(135deg, #42A5F5 0%, #64B5F6 100%);
+            --dark-secondary-color: #9e9e9e;
+            --dark-bg: #121212;
+            --dark-card-bg: #1e1e1e; 
+            --dark-text-primary: #e0e0e0;
+            --dark-text-secondary: #bdbdbd;
+            --dark-border-color: #424242;
+            --dark-card-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.3);
+            --dark-hover-shadow: 0 3px 6px rgba(0,0,0,0.25), 0 3px 6px rgba(0,0,0,0.35);
+            --dark-accent-red: #EF5350;
+
+            --current-primary-color: var(--light-primary-color);
+            --current-primary-accent-gradient: var(--light-primary-accent-gradient);
+            --current-secondary-color: var(--light-secondary-color);
+            --current-bg: var(--light-bg);
+            --current-card-bg: var(--light-card-bg);
+            --current-text-primary: var(--light-text-primary);
+            --current-text-secondary: var(--light-text-secondary);
+            --current-border-color: var(--light-border-color);
+            --current-card-shadow: var(--light-card-shadow);
+            --current-hover-shadow: var(--light-hover-shadow);
+            --current-accent-red: var(--light-accent-red);
+        }
+
+        body.dark-mode {
+            --current-primary-color: var(--dark-primary-color);
+            --current-primary-accent-gradient: var(--dark-primary-accent-gradient);
+            --current-secondary-color: var(--dark-secondary-color);
+            --current-bg: var(--dark-bg);
+            --current-card-bg: var(--dark-card-bg);
+            --current-text-primary: var(--dark-text-primary);
+            --current-text-secondary: var(--dark-text-secondary);
+            --current-border-color: var(--dark-border-color);
+            --current-card-shadow: var(--dark-card-shadow);
+            --current-hover-shadow: var(--dark-hover-shadow);
+            --current-accent-red: var(--dark-accent-red);
         }
 
         body {
             font-family: var(--font-family);
             margin: 0;
-            padding: 0; /* Let container handle padding */
-            background-color: var(--light-bg);
-            color: var(--dark-text);
+            padding: 0;
+            background-color: var(--current-bg);
+            color: var(--current-text-primary);
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .container {
             max-width: 1300px;
@@ -38,77 +78,136 @@
         }
         .header-section {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-            background-color: var(--white-bg);
+            margin-bottom: 20px;
+            padding: 20px 15px;
+            background: var(--current-card-bg);
             border-radius: 12px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--current-card-shadow);
+            position: relative;
         }
         h1 {
-            font-size: 2em;
-            font-weight: 600;
-            color: var(--dark-text);
+            font-size: 1.8em;
+            font-weight: 500;
+            color: var(--current-text-primary);
             margin: 0 0 5px 0;
         }
         h2 {
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: 400;
-            color: var(--primary-color);
+            color: var(--current-primary-color);
             margin: 0;
         }
 
-        /* Tab Navigation - Mobile Only */
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 48px;
+        }
+        .theme-switch input {
+            display:none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 3px;
+            content: "";
+            height: 18px;
+            left: 3px;
+            position: absolute;
+            transition: .4s;
+            width: 18px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-image: var(--current-primary-accent-gradient);
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        body.dark-mode .slider {
+             background-color: #555;
+        }
+        body.dark-mode input:checked + .slider {
+            background-image: var(--current-primary-accent-gradient);
+        }
+
         .mobile-tabs-nav {
-            display: none; /* Hidden by default, shown on mobile */
-            background-color: var(--white-bg);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: none;
+            background-color: var(--current-card-bg);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             border-radius: 8px;
             margin-bottom: 20px;
-            overflow-x: auto; /* For many tabs if needed */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .tabs-list {
             display: flex;
             list-style: none;
             margin: 0;
-            padding: 0;
+            padding: 5px;
         }
         .tab-button {
-            padding: 12px 18px;
+            padding: 10px 15px;
             cursor: pointer;
             text-align: center;
             font-weight: 500;
-            color: var(--secondary-color);
+            color: var(--current-text-secondary);
             border-bottom: 3px solid transparent;
             transition: color 0.3s ease, border-color 0.3s ease;
-            white-space: nowrap; /* Keep tab text on one line */
-            font-size: 0.95em;
+            white-space: nowrap;
+            font-size: 0.9em;
+            border-radius: 6px;
         }
         .tab-button:hover {
-            color: var(--primary-color);
+            background-color: rgba(128,128,128,0.1);
+            color: var(--current-primary-color);
         }
         .tab-button.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-            font-weight: 600;
+            color: var(--current-primary-color);
+            background-color: var(--current-primary-color);
+            color: white;
+            font-weight: 500;
+        }
+        body.dark-mode .tab-button.active {
+            color: var(--dark-text-primary); /* Ensure good contrast for text on gradient */
+            font-weight: 500;
         }
         .tab-button.is-today {
-            /* Subtle indicator for today's tab, even if not active */
             position: relative;
         }
-        .tab-button.is-today::after {
+        .tab-button.is-today::before {
             content: '';
             position: absolute;
-            bottom: 6px; /* Adjust position based on tab padding */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5px;
-            height: 5px;
-            background-color: var(--accent-red); /* Or var(--primary-color) */
+            top: 6px;
+            right: 8px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--current-accent-red);
             border-radius: 50%;
         }
-        .tab-button.active.is-today::after {
-            background-color: var(--primary-color); /* Match active color or keep accent */
+        .tab-button.active.is-today::before {
+             background-color: white;
+        }
+        body.dark-mode .tab-button.active.is-today::before {
+             background-color: var(--dark-text-primary);
         }
 
 
@@ -118,173 +217,165 @@
             gap: 20px;
         }
         .day-column {
-            background-color: var(--white-bg);
+            background-color: var(--current-card-bg);
             border-radius: 10px;
             padding: 20px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--current-card-shadow);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        /* No hover effect on day-column itself on mobile when tabs are active */
         @media (min-width: 769px) {
             .day-column:hover {
-                transform: translateY(-3px);
-                box-shadow: var(--card-hover-shadow);
+                transform: translateY(-2px);
+                box-shadow: var(--current-hover-shadow);
             }
         }
 
         .day-column h3 {
             margin-top: 0;
-            color: var(--primary-color);
-            font-size: 1.3em;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
+            color: var(--current-primary-color);
+            font-size: 1.25em;
+            font-weight: 500;
+            border-bottom: 1px solid var(--current-border-color);
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
         .class-entry {
-            background-color: var(--white-bg); /* Card bg */
-            border: 1px solid var(--border-color);
-            /* border-left: 4px solid var(--primary-color); */
+            background-color: var(--current-card-bg);
+            border: 1px solid var(--current-border-color);
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 8px;
             position: relative;
             cursor: default;
-            transition: box-shadow 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
         .class-entry:hover {
-            /* border-left-color: var(--accent-red); */
-            box-shadow: var(--card-hover-shadow);
+            box-shadow: var(--current-hover-shadow);
+            border-color: var(--current-primary-color);
         }
         .class-entry .time {
             font-weight: 500;
-            color: var(--secondary-color);
-            font-size: 0.9em;
+            color: var(--current-text-secondary);
+            font-size: 0.85em;
             margin-bottom: 8px;
-            display: block; /* Make it block for spacing */
+            display: block;
         }
         .class-entry .time::before {
-            content: "⏰ "; /* Clock icon */
+            content: "⏰ ";
             font-size: 0.9em;
-        }
-        .class-entry .course-info {
-            /* container for code and name */
+            opacity: 0.8;
         }
         .class-entry .course-code {
-            font-weight: 600;
-            color: var(--dark-text);
-            font-size: 1.05em;
+            font-weight: 500;
+            color: var(--current-text-primary);
+            font-size: 1em;
             display: block;
             margin-bottom: 2px;
         }
         .class-entry .course-name {
             font-weight: 400;
-            color: var(--medium-text);
-            font-size: 0.95em;
+            color: var(--current-text-secondary);
+            font-size: 0.9em;
             margin-bottom: 8px;
             display: block;
         }
         .class-entry .instructor {
-            font-size: 0.9em;
-            color: var(--secondary-color);
+            font-size: 0.85em;
+            color: var(--current-text-secondary);
             margin-top: 5px;
         }
         .class-entry .instructor::before {
-            content: "🧑‍🏫 "; /* Instructor icon - check browser compatibility or use SVG/font icon */
+            content: "🧑‍🏫 ";
             font-size: 0.9em;
+            opacity: 0.8;
         }
 
-        /* Tooltip Styles */
-        .class-entry .tooltip {
+        .tooltip {
             visibility: hidden;
             width: auto;
-            min-width: 280px;
-            max-width: 400px;
-            background-color: var(--dark-text);
-            color: var(--light-bg);
+            min-width: 260px;
+            max-width: 380px;
+            background-color: var(--current-text-primary);
+            color: var(--current-card-bg);
             text-align: left;
-            border-radius: 8px;
-            padding: 12px 15px;
+            border-radius: 6px;
+            padding: 10px 12px;
             position: absolute;
             z-index: 10;
-            bottom: 115%;
+            bottom: 110%;
             left: 50%;
             transform: translateX(-50%);
             opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            font-size: 0.9em;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            font-size: 0.85em;
             line-height: 1.5;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
         }
-        .class-entry .tooltip::after {
+        body.dark-mode .tooltip {
+            background-color: #333;
+            color: #f0f0f0;
+        }
+        .tooltip::after {
             content: "";
             position: absolute;
-            top: 100%; left: 50%; margin-left: -6px;
-            border-width: 6px; border-style: solid;
-            border-color: var(--dark-text) transparent transparent transparent;
+            top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid;
+            border-color: var(--current-text-primary) transparent transparent transparent;
+        }
+        body.dark-mode .tooltip::after {
+            border-color: #333 transparent transparent transparent;
         }
         .class-entry:hover .tooltip { visibility: visible; opacity: 1; }
-        .tooltip strong { color: var(--primary-color); font-weight: 600; }
-        .tooltip ul { padding-left: 20px; margin-top: 6px; margin-bottom: 0; list-style-type: disc; }
-        .tooltip li { margin-bottom: 4px; }
-        .tooltip .books-icon::before { content: "📚 "; }
+        .tooltip strong { color: var(--current-primary-color); font-weight: 500; }
+        body.dark-mode .tooltip strong { color: var(--dark-primary-color); }
+        .tooltip ul { padding-left: 20px; margin-top: 5px; margin-bottom: 0; list-style-type: disc; }
+        .tooltip li { margin-bottom: 3px; }
+        .tooltip .books-icon::before { content: "📚 "; opacity: 0.8; }
 
         .no-classes {
-            color: var(--secondary-color);
+            color: var(--current-text-secondary);
             font-style: italic;
             text-align: center;
             padding: 20px 0;
+            font-size: 0.9em;
         }
 
         .site-footer {
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 20px;
-            border-top: 1px solid var(--border-color);
             text-align: center;
-            font-size: 0.85em;
-            color: var(--secondary-color);
-            background-color: var(--white-bg);
-            border-radius: 0 0 12px 12px; /* If container has radius */
+            font-size: 0.8em;
+            color: var(--current-text-secondary);
+            background-color: var(--current-card-bg);
+            border-top: 1px solid var(--current-border-color);
+            border-radius: 0 0 12px 12px;
         }
         .site-footer p { margin-bottom: 5px; }
-        .site-footer a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+        .site-footer a { color: var(--current-primary-color); text-decoration: none; font-weight: 500; }
         .site-footer a:hover { text-decoration: underline; }
-        .disclaimer { font-size: 0.9em; font-style: italic; opacity: 0.8; }
+        .disclaimer { font-size: 0.95em; font-style: italic; opacity: 0.7; }
 
-        /* Mobile Specific Styles for Tabbed View */
         @media (max-width: 768px) {
-            .container {
-                padding: 0 0 10px 0; /* Remove side padding, handled by header/footer */
-            }
-            .header-section {
-                border-radius: 0; /* Full width header on mobile */
-                margin-bottom: 0;
-            }
-            .mobile-tabs-nav {
-                display: block; /* Show tabs on mobile */
-                border-radius: 0; /* Full width tabs */
-            }
-            .schedule-grid {
-                /* On mobile, grid is not used for day columns; they are shown/hidden by JS */
-                /* We could set display: block here and hide/show individual .day-column */
-                padding: 0 15px; /* Add some padding for the content area below tabs */
-            }
-            .day-column {
-                display: none; /* Hide all day columns by default on mobile */
-                margin-bottom: 20px; /* Space if multiple were shown (not in tab mode) */
-                box-shadow: none; /* Remove shadow if inside tab content area */
-                border-radius: 0; /* Could be full width content */
-                padding: 15px;
-            }
-            .day-column.active {
-                display: block; /* Show only the active day column */
-            }
-            .site-footer {
-                border-radius: 0;
-            }
+            .container { padding: 0 0 10px 0; }
+            .header-section { border-radius: 0; margin-bottom: 0; padding-top: 15px; padding-bottom: 15px; }
+            h1 { font-size: 1.5em; }
+            h2 { font-size: 1em; }
+            .theme-switch-wrapper { top: 10px; right: 10px; }
+            .theme-switch { height: 20px; width: 40px; }
+            .slider:before { height: 14px; width: 14px; bottom: 3px; left: 3px; }
+            input:checked + .slider:before { transform: translateX(20px); }
+            .mobile-tabs-nav { display: block; border-radius: 0; }
+            .schedule-grid { padding: 0 10px; }
+            .day-column { display: none; margin-bottom: 15px; box-shadow: none; border-radius: 8px; padding: 15px; }
+            .day-column.active { display: block; }
+            .site-footer { border-radius: 0; }
         }
-
+        @media (max-width: 360px) {
+            .tab-button { padding: 8px 10px; font-size: 0.85em;}
+            h1 {font-size: 1.3em;}
+            h2 {font-size: 0.9em;}
+        }
     </style>
 </head>
 <body>
@@ -292,11 +383,16 @@
         <header class="header-section">
             <h1>CLASS SCHEDULE SY 2025 -2026</h1>
             <h2>FIRST SEMESTER - LEVEL 1</h2>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="theme-checkbox">
+                    <input type="checkbox" id="theme-checkbox" />
+                    <span class="slider"></span>
+                </label>
+            </div>
         </header>
 
         <nav class="mobile-tabs-nav">
             <ul class="tabs-list">
-                <!-- Tabs will be generated by JS or can be hardcoded -->
                 <li class="tab-button" data-day="1">Mon</li>
                 <li class="tab-button" data-day="2">Tue</li>
                 <li class="tab-button" data-day="3">Wed</li>
@@ -307,7 +403,6 @@
         </nav>
 
         <main class="schedule-grid">
-            <!-- Day columns will have data-day attribute matching tabs -->
             <div class="day-column" data-day="1">
                 <h3>Monday</h3>
                 <div class="class-entry" data-course-id="JD102">
@@ -318,7 +413,7 @@
                     <span class="tooltip">
                         <strong>Units:</strong> 2<br>
                         <strong>Instructor:</strong> Atty. Vina Margreth The<br>
-                        <strong class="books-icon">Recommended Books:</strong>
+                        <strong class="books-icon">Books:</strong>
                         <ul><li>Agpalo</li></ul>
                     </span>
                 </div>
@@ -330,7 +425,7 @@
                     <span class="tooltip">
                         <strong>Units:</strong> 5<br>
                         <strong>Instructor:</strong> Atty. Bensaud O. Degusman<br>
-                        <strong class="books-icon">Recommended Books:</strong>
+                        <strong class="books-icon">Books:</strong>
                         <ul><li>The Revised Penal Code, Book 1 by Reyes</li></ul>
                     </span>
                 </div>
@@ -344,9 +439,9 @@
                     <span class="course-name">ITV (Ignatian Thoughts & Values)</span>
                     <span class="instructor">Honey Rod T. Alfaro</span>
                      <span class="tooltip">
-                        <strong>Units:</strong> N/A (Not specified)<br>
+                        <strong>Units:</strong> N/A<br>
                         <strong>Instructor:</strong> Honey Rod T. Alfaro<br>
-                        <strong class="books-icon">Recommended Books:</strong> N/A
+                        <strong class="books-icon">Books:</strong> N/A
                     </span>
                 </div>
                  <div class="class-entry" data-course-id="JD101">
@@ -357,7 +452,7 @@
                     <span class="tooltip">
                         <strong>Units:</strong> 2<br>
                         <strong>Instructor:</strong> Atty. Kenneth Vincent P. Baldua<br>
-                        <strong class="books-icon">Recommended Books:</strong> None specified
+                        <strong class="books-icon">Books:</strong> None specified
                     </span>
                 </div>
             </div>
@@ -372,8 +467,8 @@
                     <span class="tooltip">
                         <strong>Units:</strong> 1<br>
                         <strong>Instructor:</strong> Judge Timbar M. Asdaon<br>
-                        <strong class="books-icon">Recommended Books:</strong>
-                        <ul><li>Criminal Procedure by Moya II (Main book)</li><li>2025 Remedial Law Reviewer (Crimproc) by Moya 2025 Edition</li><li>Criminal Procedure. A student-oriented approach by Pineda (Backup)</li></ul>
+                        <strong class="books-icon">Books:</strong>
+                        <ul><li>Criminal Procedure by Moya II</li><li>2025 Remedial Law Reviewer by Moya</li><li>Criminal Procedure by Pineda (Backup)</li></ul>
                     </span>
                 </div>
                 <div class="class-entry" data-course-id="JD105">
@@ -384,7 +479,7 @@
                     <span class="tooltip">
                         <strong>Units:</strong> 5<br>
                         <strong>Instructor:</strong> Atty. Bensaud O. Degusman<br>
-                        <strong class="books-icon">Recommended Books:</strong>
+                        <strong class="books-icon">Books:</strong>
                         <ul><li>The Revised Penal Code, Book 1 by Reyes</li></ul>
                     </span>
                 </div>
@@ -396,12 +491,12 @@
                     <span class="time">3:00 PM - 4:00 PM</span>
                     <span class="course-code">JD 104</span>
                     <span class="course-name">CONSTITUTIONAL LAW 1</span>
-                    <span class="instructor">Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM</span>
+                    <span class="instructor">Justice Baddiri / Atty. Namla, LLM</span>
                     <span class="tooltip">
                         <strong>Units:</strong> 4<br>
                         <strong>Instructors:</strong> Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM<br>
-                        <strong class="books-icon">Recommended Books:</strong>
-                        <ul><li>The 1987 Philippine Constitutional Commentary by BERNAS</li><li>The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS</li><li>Poltlcal Reriewer Nacturs</li></ul>
+                        <strong class="books-icon">Books:</strong>
+                        <ul><li>Constitutional Commentary by BERNAS</li><li>Constitution Comprehensive Reviewer.BERNAS</li><li>Political Reviewer Notes</li></ul>
                     </span>
                 </div>
                 <div class="class-entry" data-course-id="JD103">
@@ -412,7 +507,7 @@
                     <span class="tooltip">
                         <strong>Units:</strong> 3<br>
                         <strong>Instructor:</strong> Atty. John Philip Z. Delotina<br>
-                        <strong class="books-icon">Recommended Books:</strong>
+                        <strong class="books-icon">Books:</strong>
                         <ul><li>Duks</li></ul>
                     </span>
                 </div>
@@ -424,12 +519,12 @@
                     <span class="time">5:30 PM - 6:25 PM</span>
                     <span class="course-code">JD 104</span>
                     <span class="course-name">CONSTITUTIONAL LAW 1</span>
-                    <span class="instructor">Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM</span>
+                    <span class="instructor">Justice Baddiri / Atty. Namla, LLM</span>
                      <span class="tooltip">
                         <strong>Units:</strong> 4<br>
                         <strong>Instructors:</strong> Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM<br>
-                        <strong class="books-icon">Recommended Books:</strong>
-                        <ul><li>The 1987 Philippine Constitutional Commentary by BERNAS</li><li>The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS</li><li>Poltlcal Reriewer Nacturs</li></ul>
+                        <strong class="books-icon">Books:</strong>
+                        <ul><li>Constitutional Commentary by BERNAS</li><li>Constitution Comprehensive Reviewer.BERNAS</li><li>Political Reviewer Notes</li></ul>
                     </span>
                 </div>
             </div>
@@ -442,20 +537,32 @@
 
         <footer class="site-footer">
             <p>
-                Source of information:
-                <a href="https://docs.google.com/spreadsheets/d/1KNSD7H_7dzS81U0MMM0cdg4mjyRlV7CTSHJoXHcs1RE/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Official Class Schedule Document</a>
+                Source:
+                <a href="https://docs.google.com/spreadsheets/d/1KNSD7H_7dzS81U0MMM0cdg4mjyRlV7CTSHJoXHcs1RE/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Official Document</a>
             </p>
             <p class="disclaimer">
-                Note: Schedules are subject to change. Always refer to official announcements for the most current information.
+                Schedules may change. Refer to official announcements.
             </p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const themeToggle = document.getElementById('theme-checkbox');
             const tabs = document.querySelectorAll('.mobile-tabs-nav .tab-button');
             const dayColumns = document.querySelectorAll('.schedule-grid .day-column');
             const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+            function applyTheme(isDark) {
+                if (isDark) {
+                    document.body.classList.add('dark-mode');
+                    themeToggle.checked = true;
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    themeToggle.checked = false;
+                }
+            }
 
             function activateTab(targetDay) {
                 tabs.forEach(tab => {
@@ -465,71 +572,73 @@
                     }
                 });
                 dayColumns.forEach(column => {
-                    column.classList.remove('active'); // Hides column
+                    column.classList.remove('active');
                     if (column.dataset.day === targetDay) {
-                        column.classList.add('active'); // Shows column
+                        column.classList.add('active');
                     }
                 });
             }
 
-            function initializeTabs() {
-                // Determine current day (1=Mon, ..., 6=Sat, 0=Sun)
-                const today = new Date().getDay();
-                let defaultDayToShow = '1'; // Default to Monday
+            function initializeMobileTabs() {
+                const todayJsDay = new Date().getDay(); 
+                let defaultDayToShow = '1'; 
 
-                // Map JS day (0-6) to our data-day (1-6)
-                // Sunday (0) defaults to Monday (1)
-                // Monday (1) -> 1
-                // ...
-                // Saturday (6) -> 6
-                if (today >= 1 && today <= 6) {
-                    defaultDayToShow = String(today);
+                if (todayJsDay >= 1 && todayJsDay <= 6) { 
+                    defaultDayToShow = String(todayJsDay);
                 }
                 
-                // Mark today's tab with 'is-today' class
-                const todayTabButton = document.querySelector(`.tab-button[data-day="${today === 0 ? '1' : String(today)}"]`); // if Sunday, no tab, so don't mark or handle
-                if (todayTabButton) {
-                     // Check if today's tab actually exists in our list (Mon-Sat)
-                    const currentDayTab = document.querySelector(`.tab-button[data-day="${String(today)}"]`);
-                    if (currentDayTab) {
-                        currentDayTab.classList.add('is-today');
-                    }
+                tabs.forEach(tab => tab.classList.remove('is-today'));
+                const currentDayDataVal = (todayJsDay === 0) ? '1' : String(todayJsDay); 
+                const todayTabButton = document.querySelector(`.tab-button[data-day="${currentDayDataVal}"]`);
+                if (todayTabButton && (todayJsDay >=1 && todayJsDay <=6) ) { 
+                    todayTabButton.classList.add('is-today');
                 }
 
-
-                // Check if the defaultDayToShow actually has content.
-                // If not (e.g. Saturday is 'today' but has no classes), fall back to Monday.
                 const defaultDayColumn = document.querySelector(`.day-column[data-day="${defaultDayToShow}"]`);
-                if (defaultDayColumn && defaultDayColumn.querySelector('.class-entry')) {
-                     // It has content, good to go.
-                } else if (today === 0 || today === 6) { // If it's Sunday or empty Saturday, show Monday
-                    defaultDayToShow = '1';
-                }
-                // If it's a weekday but that day happens to be empty, we might still default to it,
-                // or default to Monday. For now, it will show the empty day.
+                let hasClassesOnDefaultDay = defaultDayColumn && defaultDayColumn.querySelector('.class-entry');
 
+                if (!hasClassesOnDefaultDay && (todayJsDay === 0 || todayJsDay === 6)) {
+                     defaultDayToShow = '1'; 
+                }
+                
                 if (mobileMediaQuery.matches) {
                     activateTab(defaultDayToShow);
                 } else {
-                    // On desktop, show all day columns
-                    dayColumns.forEach(column => column.style.display = 'block'); // Ensure they are visible
+                    dayColumns.forEach(column => column.style.display = 'block');
                 }
-
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', function () {
-                        if (mobileMediaQuery.matches) {
-                            activateTab(this.dataset.day);
-                        }
-                    });
-                });
             }
             
-            // Re-evaluate on resize (e.g., from desktop to mobile or vice-versa)
-            mobileMediaQuery.addEventListener('change', () => {
-                initializeTabs(); // Re-initialize to apply correct view
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme === 'dark');
+            } else {
+                applyTheme(prefersDarkScheme.matches);
+            }
+
+            themeToggle.addEventListener('change', function () {
+                applyTheme(this.checked);
+                localStorage.setItem('theme', this.checked ? 'dark' : 'light');
+            });
+            
+            prefersDarkScheme.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    applyTheme(e.matches);
+                }
             });
 
-            initializeTabs(); // Initial setup
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    if (mobileMediaQuery.matches) {
+                        activateTab(this.dataset.day);
+                    }
+                });
+            });
+            
+            mobileMediaQuery.addEventListener('change', () => {
+                initializeMobileTabs();
+            });
+
+            initializeMobileTabs();
         });
     </script>
 </body>
