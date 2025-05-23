@@ -1,0 +1,157 @@
+{
+  "settings": {
+    "officialClassStartDate": "2025-06-04",
+    "pageTitle": "Class Schedule SY 2025-2026",
+    "pageSubtitle": "FIRST SEMESTER - LEVEL 1",
+    "sourceLinkText": "View Google Sheet",
+    "sourceLinkURL": "https://docs.google.com/spreadsheets/d/1KNSD7H_7dzS81U0MMM0cdg4mjyRlV7CTSHJoXHcs1RE/edit?gid=0#gid=0",
+    "disclaimerText": "Schedules may change. Refer to official announcements."
+  },
+  "specialEvents": [
+    {
+      "id": "event001",
+      "date": "2025-05-24",
+      "dayDisplay": "May 24, 2025 (Saturday)",
+      "timeStart": "2:00 PM",
+      "timeEnd": "5:00 PM",
+      "title": "English Enhancement Skill",
+      "details": "Via Zoom Meeting"
+    }
+  ],
+  "weeklySchedule": [
+    {
+      "dayName": "Sunday",
+      "dayIndex": 0,
+      "classes": []
+    },
+    {
+      "dayName": "Monday",
+      "dayIndex": 1,
+      "classes": [
+        {
+          "id": "JD102_Mon",
+          "courseCode": "JD 102",
+          "courseName": "STATUTORY CONSTRUCTION",
+          "instructor": "ATTY. VINA MARGARETH",
+          "time": "5:30 PM - 7:30 PM",
+          "units": 2,
+          "books": ["AGPALO"]
+        },
+        {
+          "id": "JD105_Mon",
+          "courseCode": "JD 105",
+          "courseName": "CRIMINAL LAW 1",
+          "instructor": "ATTY. BENSAUD O. DEGUSMAN",
+          "time": "7:30 PM - 9:00 PM",
+          "units": 5,
+          "books": ["The Revised Penal Code, Book 1 by Reyes"]
+        }
+      ]
+    },
+    {
+      "dayName": "Tuesday",
+      "dayIndex": 2,
+      "classes": [
+        {
+          "id": "JD107_Tue",
+          "courseCode": "JD 107",
+          "courseName": "ITV (IGNATIAN THOUGHTS AND VALUES)",
+          "instructor": "HONEY ROD T. ALFARO",
+          "time": "5:30 PM - 6:25 PM",
+          "units": 1,
+          "books": []
+        },
+        {
+          "id": "JD101_Tue",
+          "courseCode": "JD 101",
+          "courseName": "PHILOSOPHY OF LAW",
+          "instructor": "ATTY. KENNETH VINCENT P. BALDUA",
+          "time": "6:25 PM - 8:25 PM",
+          "units": 2,
+          "books": []
+        }
+      ]
+    },
+    {
+      "dayName": "Wednesday",
+      "dayIndex": 3,
+      "classes": [
+        {
+          "id": "JD105_Wed",
+          "courseCode": "JD 105",
+          "courseName": "CRIMINAL LAW 1",
+          "instructor": "ATTY. BENSAUD O. DEGUSMAN",
+          "time": "5:30 PM - 8:25 PM",
+          "units": 5,
+          "books": ["The Revised Penal Code, Book 1 by Reyes"]
+        }
+      ]
+    },
+    {
+      "dayName": "Thursday",
+      "dayIndex": 4,
+      "classes": [
+        {
+          "id": "JD103_Thu",
+          "courseCode": "JD 103",
+          "courseName": "BASIC LEGAL ETHICS",
+          "instructor": "ATTY. JOHN PHILIP Z. DELOTINA",
+          "time": "5:30 PM - 8:25 PM",
+          "units": 3,
+          "books": ["DUKS"]
+        }
+      ]
+    },
+    {
+      "dayName": "Friday",
+      "dayIndex": 5,
+      "classes": [
+        {
+          "id": "JD104_Fri",
+          "courseCode": "JD 104",
+          "courseName": "CONSTITUTIONAL LAW 1",
+          "instructor": "JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM",
+          "time": "5:30 PM - 8:25 PM",
+          "units": 4,
+          "books": [
+            "The 1987 Philippine Constitutional Commentary by BERNAS",
+            "The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS",
+            "Political Reviewer Nacturs"
+          ]
+        }
+      ]
+    },
+    {
+      "dayName": "Saturday",
+      "dayIndex": 6,
+      "classes": [
+        {
+          "id": "JD106_Sat",
+          "courseCode": "JD 106",
+          "courseName": "CRIMINAL PROCEDURE",
+          "instructor": "JUDGE TIMBAR M. ASDAON",
+          "time": "9:00 AM - 12:00 NN",
+          "units": 3,
+          "books": [
+            "Criminal Procedure by Moya II (Main book)",
+            "2025 Remedial Law Reviewer(Crimproc) by Moya 2025 Edition",
+            "Back up reference: Criminal Procedure. A student-oriented approach by Pineda"
+          ]
+        },
+        {
+          "id": "JD104_Sat",
+          "courseCode": "JD 104",
+          "courseName": "CONSTITUTIONAL LAW 1",
+          "instructor": "JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM",
+          "time": "2:00 PM - 4:00 PM",
+          "units": 4,
+          "books": [
+            "The 1987 Philippine Constitutional Commentary by BERNAS",
+            "The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS",
+            "Political Reviewer Nacturs"
+          ]
+        }
+      ]
+    }
+  ]
+}
