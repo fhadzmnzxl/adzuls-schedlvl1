@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule SY 2025-2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff; /* A nice modern blue */
+            --secondary-color: #6c757d; /* Muted gray for secondary text */
+            --light-bg: #f8f9fa;     /* Very light gray for page background */
+            --white-bg: #ffffff;
+            --dark-text: #212529;    /* Dark gray for main text */
+            --medium-text: #495057;
+            --border-color: #dee2e6;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            --hover-accent-color: #e63946; /* A contrasting accent for hover */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1300px; /* Slightly wider for more columns on large screens */
+            margin: auto;
+            background-color: var(--white-bg);
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        h2 {
+            font-size: 1.3em;
+            font-weight: 400;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        .schedule-grid {
+            display: grid;
+            /* Adjusted minmax for better phone viewing; allows cards to be wider before wrapping */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .day-column {
+            background-color: #fdfdff; /* Slightly off-white for columns */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .day-column:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-hover-shadow);
+        }
+        .day-column h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.4em;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .class-entry {
+            background-color: var(--white-bg);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+            cursor: default;
+            transition: border-left-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        .class-entry:hover {
+            border-left-color: var(--hover-accent-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .class-entry .time {
+            font-weight: 500;
+            color: var(--secondary-color);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .class-entry .course-code {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 1.1em;
+        }
+        .class-entry .course-name {
+            font-style: normal; /* Removed italic, using weight for differentiation */
+            font-weight: 400;
+            color: var(--medium-text);
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+        .class-entry .instructor {
+            font-size: 0.9em;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+
+        /* Tooltip Styles */
+        .class-entry .tooltip {
+            visibility: hidden;
+            width: auto;
+            min-width: 280px;
+            max-width: 450px;
+            background-color: var(--dark-text); /* Darker tooltip for contrast */
+            color: var(--light-bg);
+            text-align: left;
+            border-radius: 8px;
+            padding: 12px 15px;
+            position: absolute;
+            z-index: 10;
+            bottom: 115%; /* Position above the element */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-size: 0.9em;
+            line-height: 1.5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .class-entry .tooltip::after { /* Tooltip arrow */
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--dark-text) transparent transparent transparent;
+        }
+        .class-entry:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tooltip strong {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .tooltip ul {
+            padding-left: 20px;
+            margin-top: 6px;
+            margin-bottom: 0;
+            list-style-type: disc; /* More standard list bullets */
+        }
+        .tooltip li {
+            margin-bottom: 4px;
+        }
+        .no-classes {
+            color: var(--secondary-color);
+            font-style: italic;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* Footer for Source and Disclaimer */
+        .site-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--secondary-color);
+        }
+        .site-footer p {
+            margin-bottom: 5px;
+        }
+        .site-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .site-footer a:hover {
+            text-decoration: underline;
+        }
+        .disclaimer {
+            font-size: 0.9em; /* Relative to footer font size */
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CLASS SCHEDULE SY 2025 -2026</h1>
+        <h2>FIRST SEMESTER - LEVEL 1</h2>
+
+        <div class="schedule-grid">
+            <!-- Monday -->
+            <div class="day-column">
+                <h3>Monday</h3>
+                <div class="class-entry" data-course-id="JD102">
+                    <p class="time">5:30 PM - 6:25 PM</p>
+                    <p class="course-code">JD 102</p>
+                    <p class="course-name">STATUTORY CONSTRUCTION</p>
+                    <p class="instructor">Atty. Vina Margreth The</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 2<br>
+                        <strong>Instructor:</strong> Atty. Vina Margreth The<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>Agpalo</li>
+                        </ul>
+                    </span>
+                </div>
+                <div class="class-entry" data-course-id="JD105">
+                    <p class="time">7:30 PM - 8:25 PM</p>
+                    <p class="course-code">JD 105</p>
+                    <p class="course-name">CRIMINAL LAW 1</p>
+                    <p class="instructor">Atty. Bensaud O. Degusman</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 5<br>
+                        <strong>Instructor:</strong> Atty. Bensaud O. Degusman<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>The Revised Penal Code, Book 1 by Reyes</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Tuesday -->
+            <div class="day-column">
+                <h3>Tuesday</h3>
+                <div class="class-entry" data-course-id="JD107">
+                    <p class="time">5:30 PM - 6:25 PM</p>
+                    <p class="course-code">JD 107</p>
+                    <p class="course-name">ITV (Ignatian Thoughts & Values)</p>
+                    <p class="instructor">Honey Rod T. Alfaro</p>
+                     <span class="tooltip">
+                        <strong>Units:</strong> N/A (Not specified)<br>
+                        <strong>Instructor:</strong> Honey Rod T. Alfaro<br>
+                        <strong>Recommended Books:</strong> N/A
+                    </span>
+                </div>
+                 <div class="class-entry" data-course-id="JD101">
+                    <p class="time">6:30 PM - 7:30 PM</p>
+                    <p class="course-code">JD 101</p>
+                    <p class="course-name">PHILOSOPHY OF LAW</p>
+                    <p class="instructor">Atty. Kenneth Vincent P. Baldua</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 2<br>
+                        <strong>Instructor:</strong> Atty. Kenneth Vincent P. Baldua<br>
+                        <strong>Recommended Books:</strong> None specified
+                    </span>
+                </div>
+            </div>
+
+            <!-- Wednesday -->
+            <div class="day-column">
+                <h3>Wednesday</h3>
+                <div class="class-entry" data-course-id="JD106">
+                    <p class="time">9:00 AM - 10:00 AM</p>
+                    <p class="course-code">JD 106</p>
+                    <p class="course-name">CRIMINAL PROCEDURE</p>
+                    <p class="instructor">Judge Timbar M. Asdaon</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 1<br>
+                        <strong>Instructor:</strong> Judge Timbar M. Asdaon<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>Criminal Procedure by Moya II (Main book)</li>
+                            <li>2025 Remedial Law Reviewer (Crimproc) by Moya 2025 Edition</li>
+                            <li>Criminal Procedure. A student-oriented approach by Pineda (Backup)</li>
+                        </ul>
+                    </span>
+                </div>
+                <div class="class-entry" data-course-id="JD105">
+                    <p class="time">5:30 PM - 6:25 PM</p>
+                    <p class="course-code">JD 105</p>
+                    <p class="course-name">CRIMINAL LAW 1</p>
+                    <p class="instructor">Atty. Bensaud O. Degusman</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 5<br>
+                        <strong>Instructor:</strong> Atty. Bensaud O. Degusman<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>The Revised Penal Code, Book 1 by Reyes</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Thursday -->
+            <div class="day-column">
+                <h3>Thursday</h3>
+                 <div class="class-entry" data-course-id="JD104">
+                    <p class="time">3:00 PM - 4:00 PM</p>
+                    <p class="course-code">JD 104</p>
+                    <p class="course-name">CONSTITUTIONAL LAW 1</p>
+                    <p class="instructor">Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 4<br>
+                        <strong>Instructors:</strong> Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>The 1987 Philippine Constitutional Commentary by BERNAS</li>
+                            <li>The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS</li>
+                            <li>Poltlcal Reriewer Nacturs</li>
+                        </ul>
+                    </span>
+                </div>
+                <div class="class-entry" data-course-id="JD103">
+                    <p class="time">5:30 PM - 6:25 PM</p>
+                    <p class="course-code">JD 103</p>
+                    <p class="course-name">BASIC LEGAL ETHICS</p>
+                    <p class="instructor">Atty. John Philip Z. Delotina</p>
+                    <span class="tooltip">
+                        <strong>Units:</strong> 3<br>
+                        <strong>Instructor:</strong> Atty. John Philip Z. Delotina<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>Duks</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Friday -->
+            <div class="day-column">
+                <h3>Friday</h3>
+                 <div class="class-entry" data-course-id="JD104">
+                    <p class="time">5:30 PM - 6:25 PM</p>
+                    <p class="course-code">JD 104</p>
+                    <p class="course-name">CONSTITUTIONAL LAW 1</p>
+                    <p class="instructor">Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM</p>
+                     <span class="tooltip">
+                        <strong>Units:</strong> 4<br>
+                        <strong>Instructors:</strong> Justice Edilwasif T. Baddiri / Atty. Alman-Najar L. Namla, LLM<br>
+                        <strong>Recommended Books:</strong>
+                        <ul>
+                            <li>The 1987 Philippine Constitutional Commentary by BERNAS</li>
+                            <li>The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS</li>
+                            <li>Poltlcal Reriewer Nacturs</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Saturday -->
+            <div class="day-column">
+                <h3>Saturday</h3>
+                <p class="no-classes">No classes scheduled.</p>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <p>
+                Source of information:
+                <a href="https://docs.google.com/spreadsheets/d/1KNSD7H_7dzS81U0MMM0cdg4mjyRlV7CTSHJoXHcs1RE/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Official Class Schedule Document</a>
+            </p>
+            <p class="disclaimer">
+                Note: Schedules are subject to change. Always refer to official announcements for the most current information.
+            </p>
+        </footer>
+
+    </div>
+    <script>
+        // No JavaScript needed for current functionality.
+        // Future enhancements like filtering or advanced interactions could be added here.
+    </script>
+</body>
+</html>
