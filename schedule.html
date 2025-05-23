@@ -21,6 +21,8 @@
             --color-tab-disabled-text: #a9a195; 
             --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.1);
             --hover-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.15);
+            --indicator-bg: #ede0cc;
+            --indicator-text: var(--color-text-secondary);
         }
 
         body {
@@ -118,7 +120,6 @@
             background-color: var(--color-tab-disabled-text); 
         }
 
-
         .schedule-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -132,7 +133,7 @@
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
         @media (min-width: 769px) {
-            .day-column:not([data-day="0"]):hover { /* Exclude Sunday from hover effect if shown on desktop */
+            .day-column:not([data-day="0"]):hover {
                 transform: translateY(-2px);
                 box-shadow: var(--hover-shadow);
             }
@@ -196,6 +197,18 @@
             content: "🧑‍🏫 ";
             font-size: 0.9em;
             opacity: 0.7;
+        }
+        .time-left-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 0.7em;
+            padding: 2px 5px;
+            background-color: var(--indicator-bg);
+            color: var(--indicator-text);
+            border-radius: 4px;
+            display: none; 
+            font-weight: 600;
         }
 
         .tooltip {
@@ -272,6 +285,7 @@
             .tab-button { padding: 8px 10px; font-size: 0.85em;}
             h1 {font-size: 1.3em;}
             h2 {font-size: 0.9em;}
+            .time-left-indicator { top: 5px; right: 5px; font-size: 0.65em; }
         }
     </style>
 </head>
@@ -279,7 +293,7 @@
     <div class="container">
         <header class="header-section">
             <h1>CLASS SCHEDULE SY 2025 -2026</h1>
-            <h2>FIRST SEMESTER - LEVEL 1</h2>
+            <h2>FIRST SEMESTER - (YEAR 1)</h2>
         </header>
 
         <nav class="mobile-tabs-nav">
@@ -307,6 +321,7 @@
                     <span class="course-code">JD 102</span>
                     <span class="course-name">STATUTORY CONSTRUCTION</span>
                     <span class="instructor">ATTY. VINA MARGARETH</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 2<br>
                         <strong>Instructor:</strong> ATTY. VINA MARGARETH<br>
@@ -319,6 +334,7 @@
                     <span class="course-code">JD 105</span>
                     <span class="course-name">CRIMINAL LAW 1</span>
                     <span class="instructor">ATTY. BENSAUD O. DEGUSMAN</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 5<br>
                         <strong>Instructor:</strong> ATTY. BENSAUD O. DEGUSMAN<br>
@@ -335,6 +351,7 @@
                     <span class="course-code">JD 107</span>
                     <span class="course-name">ITV (IGNATIAN THOUGHTS AND VALUES)</span>
                     <span class="instructor">HONEY ROD T. ALFARO</span>
+                    <span class="time-left-indicator"></span>
                      <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 1<br>
                         <strong>Instructor:</strong> HONEY ROD T. ALFARO<br>
@@ -346,6 +363,7 @@
                     <span class="course-code">JD 101</span>
                     <span class="course-name">PHILOSOPHY OF LAW</span>
                     <span class="instructor">ATTY. KENNETH VINCENT P. BALDUA</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 2<br>
                         <strong>Instructor:</strong> ATTY. KENNETH VINCENT P. BALDUA<br>
@@ -361,6 +379,7 @@
                     <span class="course-code">JD 105</span>
                     <span class="course-name">CRIMINAL LAW 1</span>
                     <span class="instructor">ATTY. BENSAUD O. DEGUSMAN</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 5<br>
                         <strong>Instructor:</strong> ATTY. BENSAUD O. DEGUSMAN<br>
@@ -377,6 +396,7 @@
                     <span class="course-code">JD 103</span>
                     <span class="course-name">BASIC LEGAL ETHICS</span>
                     <span class="instructor">ATTY. JOHN PHILIP Z. DELOTINA</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 3<br>
                         <strong>Instructor:</strong> ATTY. JOHN PHILIP Z. DELOTINA<br>
@@ -393,6 +413,7 @@
                     <span class="course-code">JD 104</span>
                     <span class="course-name">CONSTITUTIONAL LAW 1</span>
                     <span class="instructor">JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM</span>
+                    <span class="time-left-indicator"></span>
                      <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 4<br>
                         <strong>Instructors:</strong> JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM<br>
@@ -413,6 +434,7 @@
                     <span class="course-code">JD 106</span>
                     <span class="course-name">CRIMINAL PROCEDURE</span>
                     <span class="instructor">JUDGE TIMBAR M. ASDAON</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 3<br>
                         <strong>Instructor:</strong> JUDGE TIMBAR M. ASDAON<br>
@@ -429,6 +451,7 @@
                     <span class="course-code">JD 104</span>
                     <span class="course-name">CONSTITUTIONAL LAW 1</span>
                     <span class="instructor">JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM</span>
+                    <span class="time-left-indicator"></span>
                     <span class="tooltip">
                         <strong class="units-icon">Units:</strong> 4<br>
                         <strong>Instructors:</strong> JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM<br>
@@ -461,13 +484,13 @@
             const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
 
             function activateTab(targetDay) {
-                if (targetDay === '0' && mobileMediaQuery.matches) { // Prevent Sunday from being the active content tab
+                if (targetDay === '0' && mobileMediaQuery.matches) { 
                     return; 
                 }
 
                 tabs.forEach(tab => {
                     tab.classList.remove('active');
-                    if (tab.dataset.day === targetDay && targetDay !== '0') { // Don't mark Sunday tab as 'active' style
+                    if (tab.dataset.day === targetDay && targetDay !== '0') { 
                         tab.classList.add('active');
                     }
                 });
@@ -485,7 +508,7 @@
 
                 if (todayJsDay >= 1 && todayJsDay <= 6) { 
                     defaultDayToShow = String(todayJsDay);
-                } else if (todayJsDay === 0) { // If Sunday, still default to show Monday
+                } else if (todayJsDay === 0) { 
                     defaultDayToShow = '1';
                 }
                 
@@ -504,7 +527,7 @@
                 }
                 
                 if (mobileMediaQuery.matches) {
-                    dayColumns.forEach(col => col.classList.remove('active')); // Ensure all are hidden first
+                    dayColumns.forEach(col => col.classList.remove('active')); 
                     const colToShow = document.querySelector(`.day-column[data-day="${defaultDayToShow}"]`);
                     if(colToShow) colToShow.classList.add('active');
                     
@@ -519,12 +542,10 @@
             tabs.forEach(tab => {
                 tab.addEventListener('click', function () {
                     if (mobileMediaQuery.matches) {
-                        if (this.dataset.day === '0') { // If Sunday tab is clicked
+                        if (this.dataset.day === '0') { 
                             const currentActiveTab = document.querySelector('.tab-button.active');
                             if (currentActiveTab && currentActiveTab.dataset.day !== '0') {
-                                // Keep current active tab (Mon-Sat) shown, do nothing to content
                             } else {
-                                // If no other tab is active, show Monday (or other fallback)
                                 activateTab('1'); 
                             }
                             return; 
@@ -539,6 +560,107 @@
             });
 
             initializeMobileTabs();
+
+            function parseTimeStrToDateObj(timeStr, referenceDate) {
+                const now = new Date(referenceDate); 
+                const timeParts = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM|NN)/i);
+                if (!timeParts) return null;
+
+                let hours = parseInt(timeParts[1], 10);
+                const minutes = parseInt(timeParts[2], 10);
+                const period = timeParts[3].toUpperCase();
+
+                if (period === 'PM' && hours < 12) {
+                    hours += 12;
+                } else if (period === 'AM' && hours === 12) { 
+                    hours = 0;
+                } else if (period === 'NN' && hours === 12) {
+                    // 12:00 NN is 12:00 PM
+                }
+                
+                now.setHours(hours, minutes, 0, 0);
+                return now;
+            }
+
+            function updateAllClassTimers() {
+                const now = new Date();
+                const currentDayOfWeekJs = now.getDay(); 
+
+                document.querySelectorAll('.class-entry').forEach(entry => {
+                    const indicator = entry.querySelector('.time-left-indicator');
+                    if (!indicator) return;
+
+                    const dayColumn = entry.closest('.day-column');
+                    if (!dayColumn) return;
+
+                    const classDay = parseInt(dayColumn.dataset.day, 10);
+
+                    if (classDay !== currentDayOfWeekJs) {
+                        indicator.style.display = 'none';
+                        indicator.textContent = '';
+                        return;
+                    }
+
+                    const timeElement = entry.querySelector('.time');
+                    if (!timeElement) {
+                         indicator.style.display = 'none'; return;
+                    }
+
+                    const timeRangeStr = timeElement.textContent.trim();
+                    const timeRangeParts = timeRangeStr.split(' - ');
+                    if (timeRangeParts.length < 2) {
+                        indicator.style.display = 'none'; return;
+                    }
+                    const startTimeStr = timeRangeParts[0];
+                    const endTimeStr = timeRangeParts[1];
+
+                    const classStartDateTime = parseTimeStrToDateObj(startTimeStr, now);
+                    const classEndDateTime = parseTimeStrToDateObj(endTimeStr, now);
+
+                    if (!classStartDateTime || !classEndDateTime) {
+                        indicator.style.display = 'none'; return;
+                    }
+
+                    const timeLeftMs = classStartDateTime.getTime() - now.getTime();
+
+                    if (now >= classStartDateTime && now < classEndDateTime) {
+                        indicator.style.display = 'none'; 
+                        indicator.textContent = '';
+                    } else if (timeLeftMs > 0) {
+                        const totalMinutesLeft = Math.floor(timeLeftMs / (1000 * 60));
+                        const hoursLeft = Math.floor(totalMinutesLeft / 60);
+                        const minutesPart = totalMinutesLeft % 60;
+
+                        let text = '';
+                        if (hoursLeft > 0) {
+                            text = `${hoursLeft}h`;
+                            if (minutesPart > 0 && hoursLeft < 3) { // Add minutes if less than 3 hours away
+                                text += ` ${minutesPart}m`;
+                            }
+                        } else if (minutesPart > 0) {
+                            text = `${minutesPart}m`;
+                        } else if (timeLeftMs > 0 && timeLeftMs < (1000 * 60)) {
+                            text = '<1m';
+                        } else {
+                             indicator.style.display = 'none'; return;
+                        }
+                        
+                        if (text) {
+                            indicator.textContent = text;
+                            indicator.style.display = 'inline-block';
+                        } else {
+                            indicator.style.display = 'none';
+                        }
+
+                    } else {
+                        indicator.style.display = 'none';
+                        indicator.textContent = '';
+                    }
+                });
+            }
+            
+            setInterval(updateAllClassTimers, 30000); 
+            updateAllClassTimers(); 
         });
     </script>
 </body>
