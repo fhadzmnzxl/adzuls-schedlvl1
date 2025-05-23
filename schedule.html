@@ -27,7 +27,7 @@
             --ongoing-border-color: var(--color-accent-primary);
             --ongoing-indicator-bg: var(--color-accent-primary);
             --ongoing-indicator-text: var(--color-tab-active-text);
-            --special-event-accent-border: #00796B;
+            --special-event-accent-border: #00796B; /* Teal for special events */
         }
 
         body {
@@ -67,56 +67,67 @@
         .special-events-section {
             background-color: var(--color-bg-card);
             border-radius: 10px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
+            padding: 15px 20px; 
+            margin-bottom: 25px; 
             box-shadow: var(--card-shadow);
         }
         .special-events-section h3 {
             margin-top: 0;
             color: var(--special-event-accent-border);
-            font-size: 1.2em;
+            font-size: 1.15em; 
             font-weight: 700;
             border-bottom: 1px solid var(--color-border);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             margin-bottom: 15px;
         }
         .event-entry {
             border: 1px solid var(--color-border);
-            border-left: 5px solid var(--special-event-accent-border);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
+            border-left: 4px solid var(--special-event-accent-border); 
+            padding: 10px 12px; 
+            margin-bottom: 10px; 
+            border-radius: 6px; 
             position: relative;
-            background-color: #fdfcf8;
+            background-color: #fdfdfd; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04); 
         }
         .event-entry .event-date {
             font-weight: 600;
             color: var(--color-text-secondary);
-            font-size: 0.8em;
+            font-size: 0.75em; 
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             text-transform: uppercase;
         }
         .event-entry .event-time {
             font-weight: 700;
             color: var(--color-text-primary);
-            font-size: 0.95em;
+            font-size: 0.9em; 
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         .event-entry .event-title {
             font-weight: 600;
             color: var(--color-text-primary);
-            font-size: 1.05em;
+            font-size: 1em; 
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         .event-entry .event-details {
-            font-size: 0.9em;
+            font-size: 0.85em; 
             color: var(--color-text-secondary);
         }
         .event-entry.is-ongoing {
-             border-left-color: var(--ongoing-border-color);
+             border-left-color: var(--ongoing-border-color); 
+        }
+        .event-entry .time-left-indicator, 
+        .event-entry .ongoing-indicator {
+            top: 6px; 
+            right: 6px;
+            font-size: 0.65em; 
+            padding: 1px 4px; 
+        }
+         .event-entry .ongoing-indicator::before {
+            content: "Happening Now"; 
         }
 
 
@@ -195,14 +206,14 @@
             transition: opacity 0.4s ease-out, transform 0.4s ease-out;
             opacity: 0;
             transform: translateY(10px);
-            display: none; /* Initially hidden, JS makes them active */
+            display: none; 
         }
-        .day-column.active { /* This class is added by JS for the visible tab on mobile */
+        .day-column.active { 
             display: block;
             opacity: 1;
             transform: translateY(0);
         }
-        @media (min-width: 769px) { /* Desktop: all day columns are 'active' from JS */
+        @media (min-width: 769px) { 
             .day-column { 
                 opacity: 1;
                 transform: translateY(0);
@@ -276,7 +287,7 @@
             font-size: 0.9em;
             opacity: 0.7;
         }
-        .time-left-indicator, .ongoing-indicator {
+        .time-left-indicator, .ongoing-indicator { /* General style for these indicators */
             position: absolute;
             top: 8px;
             right: 8px;
@@ -294,9 +305,6 @@
         .ongoing-indicator {
             background-color: var(--ongoing-indicator-bg);
             color: var(--ongoing-indicator-text);
-        }
-         .event-entry .ongoing-indicator::before { /* Specific text for event ongoing indicator */
-            content: "Happening Now";
         }
 
 
@@ -319,7 +327,7 @@
             transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
             pointer-events: none; 
         }
-        .class-entry.tooltip-active .tooltip, .event-entry.tooltip-active .tooltip  { /* Added .event-entry */
+        .class-entry.tooltip-active .tooltip, .event-entry.tooltip-active .tooltip {
              visibility: visible;
              opacity: 1;
              transform: translateX(-50%) translateY(-5px);
@@ -333,7 +341,7 @@
             border-color: var(--color-text-primary) transparent transparent transparent;
         }
         .class-entry:hover .tooltip:not(.class-entry.tooltip-active .tooltip),
-        .event-entry:hover .tooltip:not(.event-entry.tooltip-active .tooltip) { /* Added .event-entry */
+        .event-entry:hover .tooltip:not(.event-entry.tooltip-active .tooltip) {
              visibility: visible; opacity: 1;
         }
         .tooltip strong { color: var(--color-accent-secondary); font-weight: 700; } 
@@ -388,7 +396,13 @@
             .tab-button { padding: 8px 10px; font-size: 0.85em;}
             h1 {font-size: 1.3em;}
             h2 {font-size: 0.9em;}
-            .time-left-indicator, .ongoing-indicator { top: 5px; right: 5px; font-size: 0.65em; }
+            .time-left-indicator, .ongoing-indicator,
+            .event-entry .time-left-indicator, 
+            .event-entry .ongoing-indicator { 
+                top: 5px; 
+                right: 5px; 
+                font-size: 0.65em; 
+            }
             .event-entry .event-title { font-size: 1em; }
             .event-entry .event-time { font-size: 0.9em; }
         }
@@ -402,7 +416,7 @@
         </header>
 
         <section class="special-events-section" id="specialEventsSection" style="display: none;">
-            <h3>Upcoming Special Events</h3>
+            <h3>Special Classes</h3>
             <div id="specialEventsContainer">
             </div>
         </section>
@@ -431,7 +445,6 @@
 
             const pageTitleEl = document.getElementById('pageTitle');
             const pageSubtitleEl = document.getElementById('pageSubtitle');
-            const sourceTextPrefixEl = document.getElementById('sourceTextPrefix'); // In case you want to change "Schedule Source:"
             const sourceLinkEl = document.getElementById('sourceLink');
             const disclaimerTextEl = document.getElementById('disclaimerText');
             
@@ -485,7 +498,7 @@
                         <span class="event-title">${eventData.title}</span>
                         <span class="event-details">${eventData.details}</span>
                         <span class="time-left-indicator"></span> 
-                        <span class="ongoing-indicator">Ongoing</span>
+                        <span class="ongoing-indicator"></span>
                     </div>`;
             }
 
@@ -533,10 +546,21 @@
                     specialEventsSection.style.display = 'none';
                     return;
                 }
+                let hasEventsToShow = false;
                 eventsData.forEach(eventItem => {
-                    specialEventsContainer.innerHTML += createSpecialEventHTML(eventItem);
+                     const eventDate = new Date(eventItem.date + "T00:00:00");
+                     const now = new Date();
+                     const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                     const tomorrowDateOnly = new Date(todayDateOnly);
+                     tomorrowDateOnly.setDate(todayDateOnly.getDate() + 1);
+
+                    if(eventDate.getTime() === todayDateOnly.getTime() || eventDate.getTime() === tomorrowDateOnly.getTime()){
+                        specialEventsContainer.innerHTML += createSpecialEventHTML(eventItem);
+                        hasEventsToShow = true;
+                    }
                 });
-                manageSpecialEventsVisibility(); 
+                specialEventsSection.style.display = hasEventsToShow ? 'block' : 'none';
+                addTouchTooltipListenersToEvents(); // Add listeners to dynamically created special events
             }
             
             function addTabEventListeners() {
@@ -578,7 +602,7 @@
             function initializeMobileTabs() {
                 const tabs = document.querySelectorAll('.mobile-tabs-nav .tab-button');
                 const dayColumns = document.querySelectorAll('.schedule-grid .day-column');
-                if (tabs.length === 0) return; // No tabs rendered yet
+                if (tabs.length === 0) return; 
 
                 const todayJsDay = new Date().getDay();
                 let defaultDayToShow = String(todayJsDay); 
@@ -608,7 +632,7 @@
                     const activeTabButton = document.querySelector(`.tab-button[data-day="${defaultDayToShow}"]`);
                     if(activeTabButton && defaultDayToShow !== '0') activeTabButton.classList.add('active');
 
-                } else { // Desktop view
+                } else { 
                     dayColumns.forEach(column => {
                         column.style.display = 'block'; 
                         column.classList.add('active'); 
@@ -719,51 +743,12 @@
                     }
                 });
             }
-
-            function manageSpecialEventsVisibility() {
-                if (!specialEventsContainer || !specialEventsSection) return;
-                let hasVisibleEvent = false;
-                const now = new Date();
-                const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const tomorrowDateOnly = new Date(todayDateOnly);
-                tomorrowDateOnly.setDate(todayDateOnly.getDate() + 1);
-
-                const eventEntries = specialEventsContainer.querySelectorAll('.event-entry');
-                if (eventEntries.length === 0) {
-                    specialEventsSection.style.display = 'none';
-                    return;
-                }
-
-                eventEntries.forEach(eventEntry => {
-                    const eventDateStr = eventEntry.dataset.eventDate;
-                    if (!eventDateStr) { eventEntry.style.display = 'none'; return; }
-                    const [year, month, day] = eventDateStr.split('-').map(Number);
-                    const eventDate = new Date(year, month - 1, day);
-                    
-                    if (eventDate.getTime() === todayDateOnly.getTime() || eventDate.getTime() === tomorrowDateOnly.getTime()) {
-                        eventEntry.style.display = 'block';
-                        hasVisibleEvent = true;
-                    } else {
-                        eventEntry.style.display = 'none';
-                    }
-                });
-                specialEventsSection.style.display = hasVisibleEvent ? 'block' : 'none';
-            }
             
-            function addTouchTooltipListeners() {
+            function addTouchTooltipListenersToSelector(selector) {
                 if (isTouchDevice) {
-                    document.body.addEventListener('click', function(e) {
-                        document.querySelectorAll('.class-entry.tooltip-active, .event-entry.tooltip-active').forEach(activeEntry => {
-                            if (!activeEntry.contains(e.target)) {
-                                activeEntry.classList.remove('tooltip-active');
-                            }
-                        });
-                    });
-
-                    const allEntries = document.querySelectorAll('.class-entry, .event-entry');
-                    allEntries.forEach(entry => {
-                        const tooltip = entry.querySelector('.tooltip'); // Only add listener if tooltip exists
-                        if (tooltip) {
+                     document.querySelectorAll(selector).forEach(entry => {
+                        const tooltip = entry.querySelector('.tooltip'); 
+                        if (tooltip || selector === '.event-entry') { // Event entries might not have tooltips but could be clickable
                             entry.addEventListener('click', function(e) {
                                 if (this.classList.contains('tooltip-active')) {
                                     this.classList.remove('tooltip-active');
@@ -777,11 +762,25 @@
                     });
                 }
             }
+            function addTouchTooltipListeners() {
+                 addTouchTooltipListenersToSelector('.class-entry');
+            }
+            function addTouchTooltipListenersToEvents(){
+                 addTouchTooltipListenersToSelector('.event-entry');
+            }
+             if (isTouchDevice) {
+                document.body.addEventListener('click', function(e) {
+                    document.querySelectorAll('.class-entry.tooltip-active, .event-entry.tooltip-active').forEach(activeEntry => {
+                        if (!activeEntry.contains(e.target)) {
+                            activeEntry.classList.remove('tooltip-active');
+                        }
+                    });
+                });
+            }
             
             function runAllUpdates() {
                 updateTimers('.schedule-grid .class-entry', true);
                 updateTimers('.special-events-section .event-entry', false);
-                manageSpecialEventsVisibility();
             }
             
             fetch('schedule.json')
@@ -793,7 +792,7 @@
                 })
                 .then(data => {
                     populateStaticText(data.settings);
-                    renderSpecialEvents(data.specialEvents);
+                    renderSpecialEvents(data.specialEvents); 
                     renderSchedule(data.weeklySchedule);
                     initializeMobileTabs(); 
                     runAllUpdates(); 
@@ -801,7 +800,7 @@
                 })
                 .catch(error => {
                     console.error('Error fetching or parsing schedule data:', error);
-                    scheduleGridContainer.innerHTML = '<p style="color:red; text-align:center;">Could not load schedule data. Please try again later.</p>';
+                    if(scheduleGridContainer) scheduleGridContainer.innerHTML = '<p style="color:red; text-align:center;">Could not load schedule data. Please try again later.</p>';
                 });
         });
     </script>
