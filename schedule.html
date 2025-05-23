@@ -10,24 +10,38 @@
     <style>
         :root {
             --font-family: 'Nunito Sans', sans-serif;
-            --color-bg-page: #FFFDE7;
+
+            --color-ateneo-blue: #003A70; /* Rich Ateneo Blue */
+            --color-ateneo-blue-light: #00509E; /* Slightly lighter blue for hover/accents */
+            --color-ateneo-gold: #F1C40F; /* Ateneo Gold/Yellow */
+            --color-ateneo-gold-darker: #DAA520; /* For text on gold bg if needed, or borders */
+            
+            --color-bg-page: #F8F7F2; /* Light Ivory/Parchment */
             --color-bg-card: #FFFFFF;
-            --color-text-primary: #4A102A;
-            --color-text-secondary: #85193C;
-            --color-accent-primary: #C5172E;
-            --color-accent-primary-hover: #a01225;
-            --color-accent-secondary: #FCF259;
-            --color-border: #e0cda7;
-            --color-tab-active-text: #FFFFFF;
-            --color-tab-disabled-text: #ad8e6c;
-            --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.1);
-            --hover-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.15);
-            --indicator-bg: var(--color-accent-secondary);
+            
+            --color-text-primary: #212529; /* Very Dark Gray, almost black */
+            --color-text-secondary: #495057; /* Medium-Dark Gray */
+            --color-text-on-blue: #FFFFFF;
+            --color-text-on-gold: var(--color-text-primary); 
+
+            --color-accent-primary: var(--color-ateneo-blue);
+            --color-accent-primary-hover: var(--color-ateneo-blue-light);
+            --color-accent-secondary: var(--color-ateneo-gold);
+            
+            --color-border: #E0E0E0; /* Light neutral gray border */
+            --color-tab-active-text: var(--color-text-on-blue);
+            --color-tab-disabled-text: #A0A0A0; /* Muted gray for disabled Sunday tab */
+
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            --hover-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            
+            --indicator-bg: var(--color-ateneo-gold);
             --indicator-text: var(--color-text-primary);
-            --ongoing-border-color: var(--color-accent-primary);
-            --ongoing-indicator-bg: var(--color-accent-primary);
-            --ongoing-indicator-text: var(--color-tab-active-text);
-            --special-event-accent-border: #00796B; /* Teal for special events */
+            --ongoing-border-color: var(--color-ateneo-blue); /* Blue border for ongoing */
+            --ongoing-indicator-bg: var(--color-ateneo-blue);
+            --ongoing-indicator-text: var(--color-text-on-blue);
+            
+            --special-event-accent-border: #00796B; /* Teal for special events, can be changed */
         }
 
         body {
@@ -45,20 +59,21 @@
         }
         .header-section {
             text-align: center;
-            margin-bottom: 20px;
-            padding: 20px 15px;
+            margin-bottom: 25px;
+            padding: 25px 20px;
             background: var(--color-bg-card);
             border-radius: 12px;
             box-shadow: var(--card-shadow);
+            border-top: 4px solid var(--color-ateneo-blue);
         }
         .header-section h1 {
-            font-size: 1.8em;
+            font-size: 1.9em;
             font-weight: 700;
             color: var(--color-text-primary);
             margin: 0 0 5px 0;
         }
         .header-section h2 {
-            font-size: 1.1em;
+            font-size: 1.15em;
             font-weight: 400;
             color: var(--color-text-secondary);
             margin: 0;
@@ -130,7 +145,6 @@
             content: "Happening Now"; 
         }
 
-
         .mobile-tabs-nav {
             display: none;
             background-color: var(--color-bg-card);
@@ -153,18 +167,19 @@
             font-weight: 600;
             color: var(--color-text-secondary);
             border-bottom: 3px solid transparent;
-            transition: color 0.3s ease, background-color 0.3s ease;
+            transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
             white-space: nowrap;
             font-size: 0.9em;
             border-radius: 6px;
         }
         .tab-button:not([data-day="0"]):hover {
-            background-color: var(--color-bg-page); 
             color: var(--color-accent-primary);
+            background-color: var(--color-bg-page);
         }
         .tab-button.active:not([data-day="0"]) {
             background-color: var(--color-accent-primary);
             color: var(--color-tab-active-text);
+            border-bottom-color: var(--color-ateneo-gold); /* Gold underline for active tab */
             font-weight: 700;
         }
         .tab-button[data-day="0"] {
@@ -174,21 +189,23 @@
         }
         .tab-button.is-today {
             position: relative;
+            font-weight: 700; /* Make today's tab text bolder */
         }
-        .tab-button.is-today::before {
+        .tab-button.is-today::after { /* Dot for today, changed from ::before */
             content: '';
             position: absolute;
-            top: 6px;
-            right: 8px;
-            width: 6px;
-            height: 6px;
-            background-color: var(--color-accent-primary); 
+            bottom: 5px; /* Position dot below text */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background-color: var(--color-ateneo-gold); 
             border-radius: 50%;
         }
-        .tab-button.active.is-today:not([data-day="0"])::before {
-             background-color: var(--color-tab-active-text);
+        .tab-button.active.is-today:not([data-day="0"])::after {
+             background-color: var(--color-ateneo-gold); /* Gold dot even on active blue tab */
         }
-         .tab-button[data-day="0"].is-today::before {
+         .tab-button[data-day="0"].is-today::after {
             background-color: var(--color-tab-disabled-text); 
         }
 
@@ -207,6 +224,11 @@
             opacity: 0;
             transform: translateY(10px);
             display: none; 
+            border-top: 3px solid transparent; /* For potential today highlight on desktop */
+        }
+        .day-column.is-today-column { /* For desktop: highlight today's column */
+            border-top-color: var(--color-ateneo-gold);
+            box-shadow: var(--hover-shadow); /* Make today slightly more prominent */
         }
         .day-column.active { 
             display: block;
@@ -227,8 +249,8 @@
 
         .day-column h3 {
             margin-top: 0;
-            color: var(--color-text-primary); 
-            font-size: 1.25em;
+            color: var(--color-accent-primary); /* Blue for day headers */
+            font-size: 1.3em;
             font-weight: 700;
             border-bottom: 1px solid var(--color-border);
             padding-bottom: 10px;
@@ -246,7 +268,7 @@
         }
         .class-entry:hover {
             box-shadow: var(--hover-shadow);
-            border-color: var(--color-accent-primary);
+            border-color: var(--color-ateneo-blue); /* Blue border on hover */
         }
         .class-entry.is-ongoing {
             border-left: 5px solid var(--ongoing-border-color);
@@ -287,7 +309,7 @@
             font-size: 0.9em;
             opacity: 0.7;
         }
-        .time-left-indicator, .ongoing-indicator { /* General style for these indicators */
+        .time-left-indicator, .ongoing-indicator { 
             position: absolute;
             top: 8px;
             right: 8px;
@@ -296,17 +318,16 @@
             border-radius: 4px;
             display: none; 
             font-weight: 700;
-            border: 1px solid rgba(0,0,0,0.05);
         }
         .time-left-indicator {
             background-color: var(--indicator-bg);
             color: var(--indicator-text);
+            border: 1px solid var(--color-ateneo-gold-darker);
         }
         .ongoing-indicator {
             background-color: var(--ongoing-indicator-bg);
             color: var(--ongoing-indicator-text);
         }
-
 
         .tooltip {
             visibility: hidden;
@@ -326,6 +347,7 @@
             opacity: 0;
             transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
             pointer-events: none; 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
         .class-entry.tooltip-active .tooltip, .event-entry.tooltip-active .tooltip {
              visibility: visible;
@@ -344,12 +366,11 @@
         .event-entry:hover .tooltip:not(.event-entry.tooltip-active .tooltip) {
              visibility: visible; opacity: 1;
         }
-        .tooltip strong { color: var(--color-accent-secondary); font-weight: 700; } 
+        .tooltip strong { color: var(--color-ateneo-gold); font-weight: 700; } 
         .tooltip ul { padding-left: 20px; margin-top: 5px; margin-bottom: 0; list-style-type: disc; }
         .tooltip li { margin-bottom: 3px; }
         .tooltip .books-icon::before { content: "📚 "; opacity: 0.7; }
         .tooltip .units-icon::before { content: "🔖 "; opacity: 0.7; }
-
 
         .no-classes {
             color: var(--color-text-secondary);
@@ -384,7 +405,7 @@
 
         @media (max-width: 768px) {
             .container { padding: 0 0 10px 0; }
-            .header-section { border-radius: 0; margin-bottom: 0; padding-top: 15px; padding-bottom: 15px; }
+            .header-section { border-radius: 0; margin-bottom: 0; padding-top: 15px; padding-bottom: 15px; border-top-width: 3px; }
             .special-events-section { border-radius: 0; margin: 0 0 15px 0; }
             h1 { font-size: 1.5em; }
             h2 { font-size: 1em; }
@@ -548,7 +569,7 @@
                 }
                 let hasEventsToShow = false;
                 eventsData.forEach(eventItem => {
-                     const eventDate = new Date(eventItem.date + "T00:00:00");
+                     const eventDate = new Date(eventItem.date + "T00:00:00"); // Ensure it's treated as local date
                      const now = new Date();
                      const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                      const tomorrowDateOnly = new Date(todayDateOnly);
@@ -560,7 +581,7 @@
                     }
                 });
                 specialEventsSection.style.display = hasEventsToShow ? 'block' : 'none';
-                addTouchTooltipListenersToEvents(); // Add listeners to dynamically created special events
+                addTouchTooltipListenersToEvents(); 
             }
             
             function addTabEventListeners() {
@@ -613,7 +634,7 @@
                 } else {
                     const todayColumn = document.querySelector(`.day-column[data-day="${defaultDayToShow}"]`);
                     const hasClassesToday = todayColumn && todayColumn.querySelector('.class-entry');
-                    if (!hasClassesToday) {
+                    if (!hasClassesToday) { // If today has no classes, try saved tab, else Monday
                          defaultDayToShow = savedTab && savedTab !== '0' ? savedTab : '1';
                     }
                 }
@@ -622,6 +643,14 @@
                 const todayTabButton = document.querySelector(`.tab-button[data-day="${String(todayJsDay)}"]`);
                 if (todayTabButton) { 
                     todayTabButton.classList.add('is-today');
+                }
+
+                dayColumns.forEach(col => { // Clear previous desktop 'is-today-column'
+                    col.classList.remove('is-today-column');
+                });
+                const desktopTodayColumn = document.querySelector(`.day-column[data-day="${String(todayJsDay)}"]`);
+                if (desktopTodayColumn && !mobileMediaQuery.matches) {
+                     desktopTodayColumn.classList.add('is-today-column');
                 }
                 
                 if (mobileMediaQuery.matches) {
@@ -685,7 +714,6 @@
                     ongoingIndicator.style.display = 'none'; 
                     ongoingIndicator.textContent = isRegularClass ? 'Ongoing' : 'Happening Now';
 
-
                     let itemDate, itemStartTimeStr, itemEndTimeStr;
 
                     if (isRegularClass) {
@@ -748,7 +776,7 @@
                 if (isTouchDevice) {
                      document.querySelectorAll(selector).forEach(entry => {
                         const tooltip = entry.querySelector('.tooltip'); 
-                        if (tooltip || selector === '.event-entry') { // Event entries might not have tooltips but could be clickable
+                        if (tooltip || selector.includes('.event-entry')) { 
                             entry.addEventListener('click', function(e) {
                                 if (this.classList.contains('tooltip-active')) {
                                     this.classList.remove('tooltip-active');
@@ -766,7 +794,7 @@
                  addTouchTooltipListenersToSelector('.class-entry');
             }
             function addTouchTooltipListenersToEvents(){
-                 addTouchTooltipListenersToSelector('.event-entry');
+                 addTouchTooltipListenersToSelector('.event-entry'); // Allow events to be clickable for potential future tooltips
             }
              if (isTouchDevice) {
                 document.body.addEventListener('click', function(e) {
