@@ -27,6 +27,7 @@
             --ongoing-border-color: var(--color-accent-primary);
             --ongoing-indicator-bg: var(--color-accent-primary);
             --ongoing-indicator-text: var(--color-tab-active-text);
+            --special-event-accent-border: #00796B; /* A distinct teal for special events */
         }
 
         body {
@@ -62,6 +63,62 @@
             color: var(--color-text-secondary);
             margin: 0;
         }
+        
+        .special-events-section {
+            background-color: var(--color-bg-card);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        .special-events-section h3 {
+            margin-top: 0;
+            color: var(--special-event-accent-border);
+            font-size: 1.2em;
+            font-weight: 700;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .event-entry {
+            border: 1px solid var(--color-border);
+            border-left: 5px solid var(--special-event-accent-border);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+            background-color: #fdfcf8; /* Slightly off-white for event card */
+        }
+        .event-entry .event-date {
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            font-size: 0.8em;
+            display: block;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+        .event-entry .event-time {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            font-size: 0.95em;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .event-entry .event-title {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            font-size: 1.05em;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .event-entry .event-details {
+            font-size: 0.9em;
+            color: var(--color-text-secondary);
+        }
+        .event-entry.is-ongoing {
+             border-left-color: var(--ongoing-border-color);
+        }
+
 
         .mobile-tabs-nav {
             display: none;
@@ -146,7 +203,7 @@
             transform: translateY(0);
         }
         @media (min-width: 769px) {
-            .day-column { /* For desktop, all are active by default from JS */
+            .day-column { 
                 opacity: 1;
                 transform: translateY(0);
                 display: block;
@@ -183,7 +240,6 @@
         }
         .class-entry.is-ongoing {
             border-left: 5px solid var(--ongoing-border-color);
-            box-shadow: 0 0 8px var(--ongoing-border-color);
         }
         .class-entry .time {
             font-weight: 600;
@@ -239,8 +295,11 @@
         .ongoing-indicator {
             background-color: var(--ongoing-indicator-bg);
             color: var(--ongoing-indicator-text);
-            content: "Ongoing";
         }
+        .event-entry .ongoing-indicator::before {
+            content: "Happening Now"; /* Override for event */
+        }
+
 
         .tooltip {
             visibility: hidden;
@@ -264,7 +323,7 @@
         .class-entry.tooltip-active .tooltip {
              visibility: visible;
              opacity: 1;
-             transform: translateX(-50%) translateY(-5px); /* Slight lift */
+             transform: translateX(-50%) translateY(-5px);
              pointer-events: auto;
         }
         .tooltip::after {
@@ -274,7 +333,7 @@
             border-width: 5px; border-style: solid;
             border-color: var(--color-text-primary) transparent transparent transparent;
         }
-        .class-entry:hover .tooltip:not(.class-entry.tooltip-active .tooltip) { /* Standard hover for non-touch */
+        .class-entry:hover .tooltip:not(.class-entry.tooltip-active .tooltip) { 
              visibility: visible; opacity: 1;
         }
         .tooltip strong { color: var(--color-accent-secondary); font-weight: 700; } 
@@ -289,11 +348,11 @@
             font-style: italic;
             text-align: center;
             padding: 30px 10px;
-            font-size: 1em; /* Slightly larger */
+            font-size: 1em;
             opacity: 0.8;
         }
-        .no-classes::before { /* Optional subtle icon */
-            content: "🗓️ "; /* Calendar emoji or other suitable */
+        .no-classes::before { 
+            content: "🗓️ "; 
             font-size: 1.5em;
             display: block;
             margin-bottom: 10px;
@@ -318,11 +377,11 @@
         @media (max-width: 768px) {
             .container { padding: 0 0 10px 0; }
             .header-section { border-radius: 0; margin-bottom: 0; padding-top: 15px; padding-bottom: 15px; }
+            .special-events-section { border-radius: 0; margin: 0 0 15px 0; }
             h1 { font-size: 1.5em; }
             h2 { font-size: 1em; }
             .mobile-tabs-nav { display: block; border-radius: 0; }
             .schedule-grid { padding: 0 10px; }
-            /* .day-column is handled by .active for display on mobile */
             .site-footer { border-radius: 0; }
         }
         @media (max-width: 360px) {
@@ -330,6 +389,8 @@
             h1 {font-size: 1.3em;}
             h2 {font-size: 0.9em;}
             .time-left-indicator, .ongoing-indicator { top: 5px; right: 5px; font-size: 0.65em; }
+            .event-entry .event-title { font-size: 1em; }
+            .event-entry .event-time { font-size: 0.9em; }
         }
     </style>
 </head>
@@ -339,6 +400,18 @@
             <h1>CLASS SCHEDULE SY 2025 -2026</h1>
             <h2>FIRST SEMESTER - LEVEL 1</h2>
         </header>
+
+        <section class="special-events-section" id="specialEventsSection" style="display: none;">
+            <h3>Upcoming Special Events</h3>
+            <div class="event-entry" data-event-date="2025-05-24" data-event-time-start="2:00 PM" data-event-time-end="5:00 PM">
+                <span class="event-date">May 24, 2025 (Saturday)</span>
+                <span class="event-time">2:00 PM - 5:00 PM</span>
+                <span class="event-title">English Enhancement Skill</span>
+                <span class="event-details">Via Zoom Meeting</span>
+                <span class="time-left-indicator"></span> 
+                <span class="ongoing-indicator">Ongoing</span>
+            </div>
+        </section>
 
         <nav class="mobile-tabs-nav">
             <ul class="tabs-list">
@@ -536,12 +609,12 @@
             const dayColumns = document.querySelectorAll('.schedule-grid .day-column');
             const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
             const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+            const officialClassStartDate = new Date(2025, 5, 4); 
 
             function activateTab(targetDay, saveToLocalStorage = false) {
                 if (targetDay === '0' && mobileMediaQuery.matches) { 
                     return; 
                 }
-
                 tabs.forEach(tab => {
                     tab.classList.remove('active');
                     if (tab.dataset.day === targetDay && targetDay !== '0') { 
@@ -554,7 +627,6 @@
                         column.classList.add('active');
                     }
                 });
-
                 if (saveToLocalStorage && targetDay !== '0' && mobileMediaQuery.matches) {
                     localStorage.setItem('lastActiveScheduleTab', targetDay);
                 }
@@ -591,8 +663,8 @@
 
                 } else {
                     dayColumns.forEach(column => {
-                        column.style.display = 'block';
-                        column.classList.add('active'); // Ensure desktop shows all
+                        column.style.display = 'block'; 
+                        column.classList.add('active'); 
                     });
                 }
             }
@@ -600,10 +672,8 @@
             tabs.forEach(tab => {
                 tab.addEventListener('click', function () {
                     if (mobileMediaQuery.matches) {
-                        if (this.dataset.day === '0') { 
-                            return; 
-                        }
-                        activateTab(this.dataset.day, true); // Save manual selection
+                        if (this.dataset.day === '0') { return; }
+                        activateTab(this.dataset.day, true); 
                     }
                 });
             });
@@ -611,11 +681,10 @@
             mobileMediaQuery.addEventListener('change', () => {
                 initializeMobileTabs();
             });
-
             initializeMobileTabs();
 
-            function parseTimeStrToDateObj(timeStr, referenceDate) {
-                const now = new Date(referenceDate); 
+            function parseTimeStrToDateObj(timeStr, referenceFullDate) {
+                const dateToUse = new Date(referenceFullDate); 
                 const timeParts = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM|NN)/i);
                 if (!timeParts) return null;
 
@@ -623,52 +692,81 @@
                 const minutes = parseInt(timeParts[2], 10);
                 const period = timeParts[3].toUpperCase();
 
-                if (period === 'PM' && hours < 12) {
-                    hours += 12;
-                } else if (period === 'AM' && hours === 12) { 
-                    hours = 0;
-                } else if (period === 'NN' && hours === 12) { /* 12:00 NN is 12 PM */ }
+                if (period === 'PM' && hours < 12) hours += 12;
+                else if (period === 'AM' && hours === 12) hours = 0;
                 
-                now.setHours(hours, minutes, 0, 0);
-                return now;
+                dateToUse.setHours(hours, minutes, 0, 0);
+                return dateToUse;
             }
 
-            function updateAllClassTimers() {
+            function updateTimers(items, isRegularClass) {
                 const now = new Date();
                 const currentDayOfWeekJs = now.getDay(); 
 
-                document.querySelectorAll('.class-entry').forEach(entry => {
+                if (isRegularClass && now < officialClassStartDate) {
+                    items.forEach(entry => {
+                        const timeLeftIndicator = entry.querySelector('.time-left-indicator');
+                        const ongoingIndicator = entry.querySelector('.ongoing-indicator');
+                        if (timeLeftIndicator) timeLeftIndicator.style.display = 'none';
+                        if (ongoingIndicator) ongoingIndicator.style.display = 'none';
+                        entry.classList.remove('is-ongoing');
+                    });
+                    return;
+                }
+
+                items.forEach(entry => {
                     const timeLeftIndicator = entry.querySelector('.time-left-indicator');
                     const ongoingIndicator = entry.querySelector('.ongoing-indicator');
                     if (!timeLeftIndicator || !ongoingIndicator) return;
 
-                    const dayColumn = entry.closest('.day-column');
-                    if (!dayColumn) return;
-                    const classDay = parseInt(dayColumn.dataset.day, 10);
-
                     entry.classList.remove('is-ongoing');
-                    timeLeftIndicator.style.display = 'none';
-                    ongoingIndicator.style.display = 'none';
+                    timeLeftIndicator.style.display = 'none'; timeLeftIndicator.textContent = '';
+                    ongoingIndicator.style.display = 'none'; ongoingIndicator.textContent = 'Ongoing';
 
-                    if (classDay !== currentDayOfWeekJs) return;
 
-                    const timeElement = entry.querySelector('.time');
-                    if (!timeElement) return;
+                    let itemDate, itemStartTimeStr, itemEndTimeStr;
 
-                    const timeRangeStr = timeElement.textContent.trim();
-                    const timeRangeParts = timeRangeStr.split(' - ');
-                    if (timeRangeParts.length < 2) return;
+                    if (isRegularClass) {
+                        const dayColumn = entry.closest('.day-column');
+                        if (!dayColumn) return;
+                        const classDay = parseInt(dayColumn.dataset.day, 10);
+                        if (classDay !== currentDayOfWeekJs) return;
+                        
+                        const timeElement = entry.querySelector('.time');
+                        if (!timeElement) return;
+                        const timeRangeStr = timeElement.textContent.trim();
+                        const timeRangeParts = timeRangeStr.split(' - ');
+                        if (timeRangeParts.length < 2) return;
+                        itemStartTimeStr = timeRangeParts[0];
+                        itemEndTimeStr = timeRangeParts[1];
+                        itemDate = now; 
+                    } else { // Special Event
+                        const eventDateStr = entry.dataset.eventDate;
+                        itemStartTimeStr = entry.dataset.eventTimeStart;
+                        itemEndTimeStr = entry.dataset.eventTimeEnd;
+                        if (!eventDateStr || !itemStartTimeStr || !itemEndTimeStr) return;
+                        
+                        const [year, month, day] = eventDateStr.split('-').map(Number);
+                        itemDate = new Date(year, month - 1, day); 
+
+                        const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        const eventDateOnly = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
+                        if (eventDateOnly.getTime() !== todayDateOnly.getTime()) return; // Only process if event is today
+                    }
                     
-                    const classStartDateTime = parseTimeStrToDateObj(timeRangeParts[0], now);
-                    const classEndDateTime = parseTimeStrToDateObj(timeRangeParts[1], now);
+                    const itemStartDateTime = parseTimeStrToDateObj(itemStartTimeStr, itemDate);
+                    const itemEndDateTime = parseTimeStrToDateObj(itemEndTimeStr, itemDate);
 
-                    if (!classStartDateTime || !classEndDateTime) return;
+                    if (!itemStartDateTime || !itemEndDateTime) return;
 
-                    const timeLeftMs = classStartDateTime.getTime() - now.getTime();
+                    const timeLeftMs = itemStartDateTime.getTime() - now.getTime();
 
-                    if (now >= classStartDateTime && now < classEndDateTime) {
+                    if (now >= itemStartDateTime && now < itemEndDateTime) {
                         entry.classList.add('is-ongoing');
                         ongoingIndicator.style.display = 'inline-block';
+                         if(!isRegularClass && entry.querySelector('.event-title').textContent.includes("English")) {
+                             ongoingIndicator.textContent = "Happening Now";
+                         }
                     } else if (timeLeftMs > 0) {
                         const totalMinutesLeft = Math.floor(timeLeftMs / (1000 * 60));
                         const hoursLeft = Math.floor(totalMinutesLeft / 60);
@@ -686,6 +784,31 @@
                     }
                 });
             }
+
+            function manageSpecialEventsVisibility() {
+                const specialEventsSection = document.getElementById('specialEventsSection');
+                if (!specialEventsSection) return;
+                let hasVisibleEvent = false;
+                const now = new Date();
+                const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const tomorrowDateOnly = new Date(todayDateOnly);
+                tomorrowDateOnly.setDate(todayDateOnly.getDate() + 1);
+
+                document.querySelectorAll('.special-events-section .event-entry').forEach(eventEntry => {
+                    const eventDateStr = eventEntry.dataset.eventDate;
+                    if (!eventDateStr) { eventEntry.style.display = 'none'; return; }
+                    const [year, month, day] = eventDateStr.split('-').map(Number);
+                    const eventDate = new Date(year, month - 1, day);
+                    
+                    if (eventDate.getTime() === todayDateOnly.getTime() || eventDate.getTime() === tomorrowDateOnly.getTime()) {
+                        eventEntry.style.display = 'block';
+                        hasVisibleEvent = true;
+                    } else {
+                        eventEntry.style.display = 'none';
+                    }
+                });
+                specialEventsSection.style.display = hasVisibleEvent ? 'block' : 'none';
+            }
             
             if (isTouchDevice) {
                 document.body.addEventListener('click', function(e) {
@@ -695,7 +818,6 @@
                         }
                     });
                 });
-
                 document.querySelectorAll('.class-entry').forEach(entry => {
                     entry.addEventListener('click', function(e) {
                         if (this.classList.contains('tooltip-active')) {
@@ -709,8 +831,14 @@
                 });
             }
             
-            setInterval(updateAllClassTimers, 30000); 
-            updateAllClassTimers(); 
+            function runAllUpdates() {
+                updateTimers(document.querySelectorAll('.class-entry'), true);
+                updateTimers(document.querySelectorAll('.event-entry'), false);
+                manageSpecialEventsVisibility();
+            }
+
+            setInterval(runAllUpdates, 30000); 
+            runAllUpdates();
         });
     </script>
 </body>
