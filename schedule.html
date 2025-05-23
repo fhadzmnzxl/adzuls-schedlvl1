@@ -10,19 +10,26 @@
     <style>
         :root {
             --font-family: 'Nunito Sans', sans-serif;
-            --color-bg-page: #DFD0B8;
-            --color-bg-card: #FFFFFF;
-            --color-text-primary: #222831;
-            --color-text-secondary: #393E46;
-            --color-accent: #948979;
-            --color-accent-hover: #7a7061; 
-            --color-border: #c7bba9; 
-            --color-tab-active-text: #FFFFFF;
-            --color-tab-disabled-text: #a9a195; 
+
+            --color-bg-page: #FFFDE7; /* Very light yellow/cream for overall page background */
+            --color-bg-card: #FFFFFF; /* White for cards for max readability of dark text */
+            
+            --color-text-primary: #4A102A; /* Very Dark Purple/Maroon for main text */
+            --color-text-secondary: #85193C; /* Deep Magenta/Maroon for secondary text */
+            
+            --color-accent-primary: #C5172E; /* Strong Red for primary accents (active tabs, links) */
+            --color-accent-primary-hover: #a01225; /* Darker red for hover */
+            --color-accent-secondary: #FCF259; /* Bright Yellow for specific highlights (e.g., is-today dot, indicator bg) */
+            
+            --color-border: #e0cda7; /* Desaturated version of a light brown, derived from a light page bg */
+            --color-tab-active-text: #FFFFFF; /* White text on red active tab */
+            --color-tab-disabled-text: #ad8e6c; /* Muted text for disabled Sunday tab */
+
             --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.1);
             --hover-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.15);
-            --indicator-bg: #ede0cc;
-            --indicator-text: var(--color-text-secondary);
+            
+            --indicator-bg: var(--color-accent-secondary); /* Yellow */
+            --indicator-text: var(--color-text-primary); /* Dark purple on yellow */
         }
 
         body {
@@ -62,7 +69,7 @@
         .mobile-tabs-nav {
             display: none;
             background-color: var(--color-bg-card);
-            box-shadow: 0 1px 2px rgba(34,40,49,0.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             border-radius: 8px;
             margin-bottom: 20px;
             overflow-x: auto;
@@ -87,11 +94,11 @@
             border-radius: 6px;
         }
         .tab-button:not([data-day="0"]):hover {
-            background-color: #ede0cc; 
-            color: var(--color-text-primary);
+            background-color: var(--color-bg-page); 
+            color: var(--color-accent-primary);
         }
         .tab-button.active:not([data-day="0"]) {
-            background-color: var(--color-accent);
+            background-color: var(--color-accent-primary);
             color: var(--color-tab-active-text);
             font-weight: 700;
         }
@@ -110,7 +117,7 @@
             right: 8px;
             width: 6px;
             height: 6px;
-            background-color: var(--color-accent); 
+            background-color: var(--color-accent-primary); 
             border-radius: 50%;
         }
         .tab-button.active.is-today:not([data-day="0"])::before {
@@ -160,7 +167,7 @@
         }
         .class-entry:hover {
             box-shadow: var(--hover-shadow);
-            border-color: var(--color-accent);
+            border-color: var(--color-accent-primary);
         }
         .class-entry .time {
             font-weight: 600;
@@ -208,7 +215,8 @@
             color: var(--indicator-text);
             border-radius: 4px;
             display: none; 
-            font-weight: 600;
+            font-weight: 700; /* Make text bold on yellow for better contrast */
+            border: 1px solid rgba(0,0,0,0.1); /* Slight border for definition */
         }
 
         .tooltip {
@@ -217,7 +225,7 @@
             min-width: 260px;
             max-width: 380px;
             background-color: var(--color-text-primary); 
-            color: var(--color-bg-card); 
+            color: var(--color-bg-page); /* Light text for dark tooltip */
             text-align: left;
             border-radius: 6px;
             padding: 10px 12px;
@@ -240,7 +248,7 @@
             border-color: var(--color-text-primary) transparent transparent transparent;
         }
         .class-entry:hover .tooltip { visibility: visible; opacity: 1; }
-        .tooltip strong { color: var(--color-accent); font-weight: 700; }
+        .tooltip strong { color: var(--color-accent-secondary); font-weight: 700; } /* Yellow for strong in tooltip */
         .tooltip ul { padding-left: 20px; margin-top: 5px; margin-bottom: 0; list-style-type: disc; }
         .tooltip li { margin-bottom: 3px; }
         .tooltip .books-icon::before { content: "📚 "; opacity: 0.7; }
@@ -266,8 +274,8 @@
             border-radius: 0 0 12px 12px;
         }
         .site-footer p { margin-bottom: 5px; }
-        .site-footer a { color: var(--color-accent); text-decoration: none; font-weight: 600; }
-        .site-footer a:hover { color: var(--color-accent-hover); text-decoration: underline;}
+        .site-footer a { color: var(--color-accent-primary); text-decoration: none; font-weight: 600; }
+        .site-footer a:hover { color: var(--color-accent-primary-hover); text-decoration: underline;}
         .disclaimer { font-size: 0.95em; font-style: italic; opacity: 0.7; }
 
         @media (max-width: 768px) {
@@ -293,7 +301,7 @@
     <div class="container">
         <header class="header-section">
             <h1>CLASS SCHEDULE SY 2025 -2026</h1>
-            <h2>FIRST SEMESTER - (YEAR 1)</h2>
+            <h2>FIRST SEMESTER - LEVEL 1</h2>
         </header>
 
         <nav class="mobile-tabs-nav">
@@ -421,7 +429,7 @@
                         <ul>
                             <li>The 1987 Philippine Constitutional Commentary by BERNAS</li>
                             <li>The 1987 Phlippine Constitution Comprehensive Reviewer.BERNAS</li>
-                            <li>Poltlcal Reriewer Nacturs</li>
+                            <li>Political Reviewer Nacturs</li>
                         </ul>
                     </span>
                 </div>
@@ -575,7 +583,6 @@
                 } else if (period === 'AM' && hours === 12) { 
                     hours = 0;
                 } else if (period === 'NN' && hours === 12) {
-                    // 12:00 NN is 12:00 PM
                 }
                 
                 now.setHours(hours, minutes, 0, 0);
@@ -634,9 +641,6 @@
                         let text = '';
                         if (hoursLeft > 0) {
                             text = `${hoursLeft}h`;
-                            if (minutesPart > 0 && hoursLeft < 3) { // Add minutes if less than 3 hours away
-                                text += ` ${minutesPart}m`;
-                            }
                         } else if (minutesPart > 0) {
                             text = `${minutesPart}m`;
                         } else if (timeLeftMs > 0 && timeLeftMs < (1000 * 60)) {
