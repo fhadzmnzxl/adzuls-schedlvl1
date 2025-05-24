@@ -505,6 +505,7 @@
             const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
             let officialClassStartDate; 
             let allMotivationalQuotes = [];
+            let currentScheduleData = {}; // Store fetched schedule data globally
 
             const pageTitleEl = document.getElementById('pageTitle');
             const pageSubtitleEl = document.getElementById('pageSubtitle');
@@ -529,7 +530,10 @@
                 if (settings.sourceLinkText && sourceLinkEl) sourceLinkEl.textContent = settings.sourceLinkText;
                 if (settings.sourceLinkURL && sourceLinkEl) sourceLinkEl.href = settings.sourceLinkURL;
                 if (settings.disclaimerText && disclaimerTextEl) disclaimerTextEl.textContent = settings.disclaimerText;
-                if (settings.officialClassStartDate) officialClassStartDate = new Date(settings.officialClassStartDate + "T00:00:00");
+                if (settings.officialClassStartDate) {
+                    const [year, month, day] = settings.officialClassStartDate.split('-').map(Number);
+                    officialClassStartDate = new Date(year, month - 1, day); // Month is 0-indexed
+                }
             }
 
             function createClassEntryHTML(classData) {
@@ -558,36 +562,33 @@
             
             function createSpecialEventHTML(eventData) {
                 let timeDisplay = '';
-                if (eventData.displayRule.timeStart && eventData.displayRule.timeEnd) {
-                    timeDisplay = `${eventData.displayRule.timeStart} - ${eventData.displayRule.timeEnd}`;
-                } else if (eventData.displayRule.timeStart) {
-                    timeDisplay = `Starts at ${eventData.displayRule.timeStart}`;
-                } else if (eventData.displayRule.eventTime && eventData.displayRule.eventTime !== "All Day") {
-                     timeDisplay = eventData.displayRule.eventTime;
-                } else if (eventData.displayRule.eventTime === "All Day") {
+                const rule = eventData.displayRule;
+                if (rule.timeStart && rule.timeEnd) {
+                    timeDisplay = `${rule.timeStart} - ${rule.timeEnd}`;
+                } else if (rule.timeStart) {
+                    timeDisplay = `Starts at ${rule.timeStart}`;
+                } else if (rule.eventTime && rule.eventTime !== "All Day") {
+                     timeDisplay = rule.eventTime;
+                } else if (rule.eventTime === "All Day") {
                      timeDisplay = "All Day";
                 }
 
-
-                let dateDisplay = eventData.displayRule.dayDisplay || eventData.displayRule.date || '';
-                if (eventData.displayRule.type === "dateRange") {
-                    dateDisplay = `Relevant: ${eventData.displayRule.visibleFrom} to ${eventData.displayRule.visibleUntil}`;
-                    if(eventData.displayRule.eventDate) {
-                        dateDisplay += ` (Event on ${eventData.displayRule.eventDate})`;
-                    }
-                } else if (eventData.displayRule.type === "multiDate") {
-                    dateDisplay = `On: ${eventData.displayRule.dates.join(', ')}`;
-                } else if (eventData.displayRule.type === "persistentUntil") {
-                     dateDisplay = `Important until: ${eventData.displayRule.showUntil}`;
+                let dateDisplay = rule.dayDisplay || rule.date || '';
+                if (rule.type === "dateRange") {
+                    dateDisplay = `Relevant: ${rule.visibleFrom} to ${rule.visibleUntil}`;
+                    if(rule.eventDate) dateDisplay += ` (Event on ${rule.eventDate})`;
+                } else if (rule.type === "multiDate" && rule.dates) {
+                    dateDisplay = `On: ${rule.dates.join(', ')}`;
+                } else if (rule.type === "persistentUntil") {
+                     dateDisplay = `Important until: ${rule.showUntil}`;
                 }
-
 
                 return `
                     <div class="event-entry" 
                          data-event-id="${eventData.id}" 
-                         data-event-date="${eventData.displayRule.date || eventData.displayRule.eventDate || eventData.displayRule.dates?.[0] || ''}"
-                         data-event-time-start="${eventData.displayRule.timeStart || ''}" 
-                         data-event-time-end="${eventData.displayRule.timeEnd || ''}">
+                         data-event-date="${rule.date || rule.eventDate || (rule.dates?.[0]) || ''}"
+                         data-event-time-start="${rule.timeStart || ''}" 
+                         data-event-time-end="${rule.timeEnd || ''}">
                         <span class="event-date">${dateDisplay}</span>
                         ${timeDisplay ? `<span class="event-time">${timeDisplay}</span>` : ''}
                         <span class="event-title">${eventData.title}</span>
@@ -634,45 +635,40 @@
             function renderSpecialEvents(eventsData) {
                 specialEventsContainer.innerHTML = '';
                 if (!eventsData || eventsData.length === 0) {
-                    specialEventsSection.style.display = 'none';
+                    if (specialEventsSection) specialEventsSection.style.display = 'none';
                     return;
                 }
                 
                 const now = new Date();
-                const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const todayYMD = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                
                 let hasVisibleEvents = false;
 
                 eventsData.forEach(eventItem => {
                     if (!eventItem.displayRule) return; 
-
                     let shouldDisplay = false;
                     const rule = eventItem.displayRule;
 
-                    switch (rule.type) {
-                        case 'specificDate':
-                            const specificEventDate = new Date(rule.date + "T00:00:00");
-                            if (specificEventDate.getTime() === todayDateOnly.getTime()) {
-                                shouldDisplay = true;
-                            }
-                            break;
-                        case 'dateRange':
-                            const visibleFrom = new Date(rule.visibleFrom + "T00:00:00");
-                            const visibleUntil = new Date(rule.visibleUntil + "T23:59:59"); // End of day
-                            if (todayDateOnly >= visibleFrom && todayDateOnly <= visibleUntil) {
-                                shouldDisplay = true;
-                            }
-                            break;
-                        case 'multiDate':
-                            if (rule.dates && rule.dates.some(dStr => new Date(dStr + "T00:00:00").getTime() === todayDateOnly.getTime())) {
-                                shouldDisplay = true;
-                            }
-                            break;
-                        case 'persistentUntil':
-                            const showUntil = new Date(rule.showUntil + "T23:59:59"); // End of day
-                            if (todayDateOnly <= showUntil) {
-                                shouldDisplay = true;
-                            }
-                            break;
+                    try {
+                        switch (rule.type) {
+                            case 'specificDate':
+                                if (rule.date === todayYMD) shouldDisplay = true;
+                                break;
+                            case 'dateRange':
+                                const visibleFrom = new Date(rule.visibleFrom + "T00:00:00");
+                                const visibleUntil = new Date(rule.visibleUntil + "T23:59:59");
+                                if (now >= visibleFrom && now <= visibleUntil) shouldDisplay = true;
+                                break;
+                            case 'multiDate':
+                                if (rule.dates && rule.dates.includes(todayYMD)) shouldDisplay = true;
+                                break;
+                            case 'persistentUntil':
+                                const showUntil = new Date(rule.showUntil + "T23:59:59");
+                                if (now <= showUntil) shouldDisplay = true;
+                                break;
+                        }
+                    } catch (e) {
+                        console.error("Error processing displayRule for event:", eventItem.id, e);
                     }
 
                     if (shouldDisplay) {
@@ -680,7 +676,8 @@
                         hasVisibleEvents = true;
                     }
                 });
-                specialEventsSection.style.display = hasVisibleEvents ? 'block' : 'none';
+
+                if (specialEventsSection) specialEventsSection.style.display = hasVisibleEvents ? 'block' : 'none';
                 addTouchTooltipListenersToEvents();
             }
             
@@ -790,6 +787,8 @@
             function updateTimers(itemsSelector, isRegularClass) {
                 const now = new Date();
                 const currentDayOfWeekJs = now.getDay(); 
+                const todayYMD = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
                 if (isRegularClass && officialClassStartDate && now < officialClassStartDate) {
                     document.querySelectorAll(itemsSelector).forEach(entry => {
                         const timeLeftIndicator = entry.querySelector('.time-left-indicator');
@@ -800,20 +799,27 @@
                     });
                     return;
                 }
+
                 document.querySelectorAll(itemsSelector).forEach(entry => {
                     const timeLeftIndicator = entry.querySelector('.time-left-indicator');
                     const ongoingIndicator = entry.querySelector('.ongoing-indicator');
                     if (!timeLeftIndicator || !ongoingIndicator) return;
+                    
                     entry.classList.remove('is-ongoing');
                     timeLeftIndicator.style.display = 'none'; timeLeftIndicator.textContent = '';
                     ongoingIndicator.style.display = 'none'; 
                     ongoingIndicator.textContent = isRegularClass ? 'Ongoing' : 'Happening Now';
-                    let itemDate, itemStartTimeStr, itemEndTimeStr;
+
+                    let itemDateForTimingLogic; 
+                    let itemStartTimeStr, itemEndTimeStr;
+                    let eventIsToday = false;
+
                     if (isRegularClass) {
                         const dayColumn = entry.closest('.day-column');
                         if (!dayColumn) return;
                         const classDay = parseInt(dayColumn.dataset.day, 10);
                         if (classDay !== currentDayOfWeekJs) return;
+                        
                         const timeElement = entry.querySelector('.time');
                         if (!timeElement) return;
                         const timeRangeStr = timeElement.textContent.trim();
@@ -821,24 +827,33 @@
                         if (timeRangeParts.length < 2) return;
                         itemStartTimeStr = timeRangeParts[0];
                         itemEndTimeStr = timeRangeParts[1];
-                        itemDate = now; 
+                        itemDateForTimingLogic = now; 
+                        eventIsToday = true; 
                     } else { 
-                        const eventDateStr = entry.dataset.eventDate; // This will be the primary date for timer logic
+                        const eventDataDateStr = entry.dataset.eventDate; // This specific date of the event itself
                         itemStartTimeStr = entry.dataset.eventTimeStart;
                         itemEndTimeStr = entry.dataset.eventTimeEnd;
-                        if (!eventDateStr || !itemStartTimeStr || !itemEndTimeStr) return; // Needs these for timers
-                        
-                        const [year, month, day] = eventDateStr.split('-').map(Number);
-                        itemDate = new Date(year, month - 1, day); 
 
-                        const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                        const eventDateOnly = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
-                        if (eventDateOnly.getTime() !== todayDateOnly.getTime()) return; 
+                        if (!eventDataDateStr || !itemStartTimeStr || !itemEndTimeStr) return; 
+                        
+                        if (eventDataDateStr === todayYMD) {
+                             eventIsToday = true;
+                             const [year, month, day] = eventDataDateStr.split('-').map(Number);
+                             itemDateForTimingLogic = new Date(year, month - 1, day);
+                        } else {
+                            return; // Don't process timers if event is not today
+                        }
                     }
-                    const itemStartDateTime = parseTimeStrToDateObj(itemStartTimeStr, itemDate);
-                    const itemEndDateTime = parseTimeStrToDateObj(itemEndTimeStr, itemDate);
+                    
+                    if (!eventIsToday) return; // Skip if not today
+
+                    const itemStartDateTime = parseTimeStrToDateObj(itemStartTimeStr, itemDateForTimingLogic);
+                    const itemEndDateTime = parseTimeStrToDateObj(itemEndTimeStr, itemDateForTimingLogic);
+
                     if (!itemStartDateTime || !itemEndDateTime) return;
+
                     const timeLeftMs = itemStartDateTime.getTime() - now.getTime();
+
                     if (now >= itemStartDateTime && now < itemEndDateTime) {
                         entry.classList.add('is-ongoing');
                         ongoingIndicator.style.display = 'inline-block';
@@ -887,13 +902,13 @@
             }
             
             function runAllUpdates() {
-                renderSpecialEvents(currentScheduleData.specialEvents); // Re-render to apply date logic
+                if (currentScheduleData && currentScheduleData.specialEvents) {
+                    renderSpecialEvents(currentScheduleData.specialEvents); 
+                }
                 updateTimers('.schedule-grid .class-entry', true);
                 updateTimers('.special-events-section .event-entry', false);
             }
             
-            let currentScheduleData = {}; // Store fetched schedule data globally within this scope
-
             Promise.all([
                 fetch('schedule.json').then(res => {
                     if (!res.ok) throw new Error(`Schedule JSON fetch error: ${res.statusText}`);
@@ -911,7 +926,7 @@
                 })
             ])
             .then(([scheduleAPIData, quotesData]) => {
-                currentScheduleData = scheduleAPIData; // Store for re-rendering special events
+                currentScheduleData = scheduleAPIData; 
                 allMotivationalQuotes = quotesData;
                 populateStaticText(scheduleAPIData.settings);
                 renderSpecialEvents(scheduleAPIData.specialEvents); 
