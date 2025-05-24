@@ -50,7 +50,7 @@
       "details": "Final deadline for Torts paper submission.",
       "displayRule": {
         "type": "persistentUntil", 
-        "showUntil": "2025-10-20",
+        "showUntil": "2024-10-20",
         "dayDisplay": "Important until Oct 20" 
       }
     }
