@@ -137,7 +137,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderSpecialEvents(eventsData) {
         if (!specialEventsContainer || !specialEventsSection) return;
-        specialEventsContainer.innerHTML = '';
+        specialEventsContainer.innerHTML = ''; // Clear previous events
+        
         if (!eventsData || eventsData.length === 0) {
             specialEventsSection.style.display = 'none';
             return;
@@ -156,21 +157,25 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 switch (rule.type) {
                     case 'specificDate':
-                        const specificEventDate = new Date(rule.date + "T00:00:00");
-                        const eventEndTimeForCheck = rule.timeEnd ? parseTimeStrToDateObj(rule.timeEnd, specificEventDate) : null;
-                        if (rule.date === todayYMD && (!eventEndTimeForCheck || now < eventEndTimeForCheck)) {
-                            shouldDisplay = true;
+                        if (rule.date === todayYMD) {
+                            const specificEventDateForTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                            const eventEndTimeForCheck = rule.timeEnd ? parseTimeStrToDateObj(rule.timeEnd, specificEventDateForTime) : null;
+                            if (!eventEndTimeForCheck || now < eventEndTimeForCheck) {
+                                shouldDisplay = true;
+                            }
                         }
                         break;
                     case 'dateRange':
                         const visibleFrom = new Date(rule.visibleFrom + "T00:00:00");
-                        const visibleUntil = new Date(rule.visibleUntil + "T23:59:59");
-                        if (now >= visibleFrom && now <= visibleUntil) shouldDisplay = true;
+                        const visibleUntil = new Date(rule.visibleUntil + "T23:59:59"); 
+                        if (now >= visibleFrom && now <= visibleUntil) {
+                            shouldDisplay = true;
+                        }
                         break;
                     case 'multiDate':
                         if (rule.dates && rule.dates.includes(todayYMD)) {
-                            const multiEventDate = new Date(todayYMD + "T00:00:00");
-                            const multiEventEndTime = rule.timeEnd ? parseTimeStrToDateObj(rule.timeEnd, multiEventDate) : null;
+                            const multiEventDateForTime = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                            const multiEventEndTime = rule.timeEnd ? parseTimeStrToDateObj(rule.timeEnd, multiEventDateForTime) : null;
                              if (!multiEventEndTime || now < multiEventEndTime) {
                                 shouldDisplay = true;
                             }
@@ -178,7 +183,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
                     case 'persistentUntil':
                         const showUntil = new Date(rule.showUntil + "T23:59:59");
-                        if (now <= showUntil) shouldDisplay = true;
+                        if (now <= showUntil) {
+                            shouldDisplay = true;
+                        }
                         break;
                 }
             } catch (e) {
@@ -191,7 +198,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        specialEventsSection.style.display = hasVisibleEvents ? 'block' : 'none';
+        if (specialEventsSection) {
+            specialEventsSection.style.display = hasVisibleEvents ? 'block' : 'none';
+        }
         addTouchTooltipListenersToEvents();
     }
     
@@ -277,7 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if(activeTabButton && defaultDayToShow !== '0') activeTabButton.classList.add('active');
         } else { 
             dayColumns.forEach(column => {
-                column.style.display = 'block'; 
+                // On desktop, all day-columns are 'active' in terms of class for potential styling,
+                // but their display:block is handled by CSS media query directly.
                 column.classList.add('active'); 
             });
         }
@@ -326,8 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let itemDateForTimingLogic; 
             let itemStartTimeStr, itemEndTimeStr;
-            let eventIsToday = false;
-            let eventHasSpecificTimes = false;
+            let eventIsTodayAndHasTimes = false;
 
             if (isRegularClass) {
                 const dayColumn = entry.closest('.day-column');
@@ -343,24 +352,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 itemStartTimeStr = timeRangeParts[0];
                 itemEndTimeStr = timeRangeParts[1];
                 itemDateForTimingLogic = new Date(now); 
-                eventIsToday = true; 
-                eventHasSpecificTimes = true;
-            } else { // Special Event
+                eventIsTodayAndHasTimes = true; 
+            } else { 
                 const eventDataDateStr = entry.dataset.eventDate; 
                 itemStartTimeStr = entry.dataset.eventTimeStart;
                 itemEndTimeStr = entry.dataset.eventTimeEnd;
 
-                if (eventDataDateStr && itemStartTimeStr && itemEndTimeStr) { // Only process timers if event has a specific date and times
+                if (eventDataDateStr && itemStartTimeStr && itemEndTimeStr) { 
                     if (eventDataDateStr === todayYMD) {
-                         eventIsToday = true;
                          const [year, month, day] = eventDataDateStr.split('-').map(Number);
                          itemDateForTimingLogic = new Date(year, month - 1, day);
-                         eventHasSpecificTimes = true;
+                         eventIsTodayAndHasTimes = true;
                     }
                 }
             }
             
-            if (!eventIsToday || !eventHasSpecificTimes) return; 
+            if (!eventIsTodayAndHasTimes) return; 
 
             const itemStartDateTime = parseTimeStrToDateObj(itemStartTimeStr, itemDateForTimingLogic);
             const itemEndDateTime = parseTimeStrToDateObj(itemEndTimeStr, itemDateForTimingLogic);
@@ -370,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (now >= itemStartDateTime && now < itemEndDateTime) {
                 entry.classList.add('is-ongoing');
                 ongoingIndicator.style.display = 'inline-block';
-            } else if (now < itemStartDateTime) { // Only show "time left" if event is in the future today
+            } else if (now < itemStartDateTime) { 
                 const timeLeftMs = itemStartDateTime.getTime() - now.getTime();
                 const totalMinutesLeft = Math.floor(timeLeftMs / (1000 * 60));
                 const hoursLeft = Math.floor(totalMinutesLeft / 60);
@@ -384,15 +391,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     timeLeftIndicator.style.display = 'inline-block';
                 }
             } else { // Event is past
-                if (!isRegularClass && entry.dataset.displayType === 'specificDate') { // If it's a specificDate special event and it's past
-                    entry.classList.add('hidden-event'); // Add class for smooth removal
-                    setTimeout(() => { // Remove from DOM after transition
+                if (!isRegularClass && entry.dataset.displayType === 'specificDate') { 
+                    entry.classList.add('hidden-event'); 
+                    setTimeout(() => { 
                         if (entry.parentNode) entry.parentNode.removeChild(entry);
-                        // Check if special events section needs to be hidden
-                        if (specialEventsContainer.children.length === 0 && specialEventsSection) {
+                        if (specialEventsContainer && specialEventsContainer.children.length === 0 && specialEventsSection) {
                             specialEventsSection.style.display = 'none';
                         }
-                    }, 500); // Match CSS transition duration
+                    }, 500); 
                 }
             }
         });
@@ -454,8 +460,8 @@ document.addEventListener('DOMContentLoaded', function () {
         currentScheduleData = scheduleAPIData; 
         allMotivationalQuotes = quotesData;
         populateStaticText(scheduleAPIData.settings);
-        renderSpecialEvents(scheduleAPIData.specialEvents); 
-        renderSchedule(scheduleAPIData.weeklySchedule);
+        renderSchedule(scheduleAPIData.weeklySchedule); // Render main schedule first
+        renderSpecialEvents(scheduleAPIData.specialEvents); // Then special events (which might affect section visibility)
         initializeMobileTabs(); 
         if (allMotivationalQuotes.length > 0) displayRandomQuote(); else if(quoteSectionEl) quoteSectionEl.style.display = 'none';
         runAllUpdates(); 
