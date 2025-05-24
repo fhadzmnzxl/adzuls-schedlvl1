@@ -19,41 +19,6 @@
         "timeEnd": "5:00 PM",
         "dayDisplay": "May 24, 2025 (Saturday)" 
       }
-    },
-    {
-      "id": "event_law_week_reg",
-      "title": "Law Week Registration Period",
-      "details": "Register online for upcoming Law Week activities. Don't miss out!",
-      "displayRule": {
-        "type": "dateRange",
-        "visibleFrom": "2025-09-01",
-        "visibleUntil": "2025-09-15",
-        "eventDate": null, 
-        "eventTime": "All Day", 
-        "dayDisplay": "Sept 1 - Sept 15" 
-      }
-    },
-    {
-      "id": "event_bar_lecture_series",
-      "title": "Bar Review Lecture Series",
-      "details": "Guest lectures for bar candidates. Venue: Auditorium.",
-      "displayRule": {
-        "type": "multiDate",
-        "dates": ["2025-10-07", "2025-10-14", "2025-10-21"],
-        "dayDisplay": "Tuesdays in October (7, 14, 21)", 
-        "timeStart": "6:00 PM",
-        "timeEnd": "8:00 PM"
-      }
-    },
-    {
-      "id": "event_holiday_nov1",
-      "title": "All Saints' Day (No Classes)",
-      "details": "University closed for All Saints' Day.",
-      "displayRule": {
-        "type": "persistentUntil", 
-        "showUntil": "2025-11-01", 
-        "dayDisplay": "Announcement: Nov 1 Holiday" 
-      }
     }
   ],
   "weeklySchedule": [
