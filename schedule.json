@@ -1,7 +1,7 @@
 {
   "settings": {
     "officialClassStartDate": "2025-06-04",
-    "pageTitle": "Class Schedule SY 2025-2026",
+    "pageTitle": "Class Schedule",
     "pageSubtitle": "FIRST SEMESTER - LEVEL 1",
     "sourceLinkText": "View Google Sheet",
     "sourceLinkURL": "https://docs.google.com/spreadsheets/d/1KNSD7H_7dzS81U0MMM0cdg4mjyRlV7CTSHJoXHcs1RE/edit?gid=0#gid=0",
@@ -113,7 +113,7 @@
           "id": "JD104_Fri",
           "courseCode": "JD 104",
           "courseName": "CONSTITUTIONAL LAW 1",
-          "instructor": "JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM",
+          "instructor": "JUSTICE EDILWASIF T. BADDIRI / ATTY. ALMAN-NAJAR L. NAMLA, LLM",
           "time": "5:30 PM - 8:25 PM",
           "units": 4,
           "books": [
@@ -145,7 +145,7 @@
           "id": "JD104_Sat",
           "courseCode": "JD 104",
           "courseName": "CONSTITUTIONAL LAW 1",
-          "instructor": "JUSTICE EDILWASIF T. BADDIRI or ATTY. ALMAN-NAJAR L. NAMLA, LLM",
+          "instructor": "JUSTICE EDILWASIF T. BADDIRI / ATTY. ALMAN-NAJAR L. NAMLA, LLM",
           "time": "2:00 PM - 4:00 PM",
           "units": 4,
           "books": [
