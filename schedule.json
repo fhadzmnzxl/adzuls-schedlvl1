@@ -9,7 +9,7 @@
   },
   "specialEvents": [
     {
-      "id": "event001",
+      "id": "event_english_enhancement_20250524",
       "title": "English Enhancement Skill",
       "details": "Via Zoom Meeting",
       "displayRule": {
@@ -17,41 +17,7 @@
         "date": "2025-05-24", 
         "timeStart": "2:00 PM",
         "timeEnd": "5:00 PM",
-        "dayDisplay": "May 24, 2025 (Saturday)"
-      }
-    },
-    {
-      "id": "event002",
-      "title": "Law Week Registration Open",
-      "details": "Register online for Law Week activities. Early bird discount available.",
-      "displayRule": {
-        "type": "dateRange",
-        "visibleFrom": "2025-09-01",
-        "visibleUntil": "2025-09-15",
-        "eventDate": null, 
-        "eventTime": "All Day" 
-      }
-    },
-    {
-      "id": "event003",
-      "title": "Moot Court Practice Sessions",
-      "details": "Sign up at the Dean's office. Limited slots.",
-      "displayRule": {
-        "type": "multiDate",
-        "dates": ["2025-10-05", "2025-10-12", "2025-10-19"],
-        "dayDisplay": "Selected Sundays in October", 
-        "timeStart": "1:00 PM",
-        "timeEnd": "4:00 PM"
-      }
-    },
-    {
-      "id": "event004",
-      "title": "Reminder: Submit Torts Paper",
-      "details": "Final deadline for Torts paper submission.",
-      "displayRule": {
-        "type": "persistentUntil", 
-        "showUntil": "2024-10-20",
-        "dayDisplay": "Important until Oct 20" 
+        "dayDisplay": "May 24, 2025 (Saturday)" 
       }
     }
   ],
