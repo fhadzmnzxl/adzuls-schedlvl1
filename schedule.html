@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Schedule</title> 
+    <!-- <link rel="icon" href="logo.png" type="image/png"> -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -136,7 +137,6 @@
             font-size: 0.65em; 
             padding: 1px 4px; 
         }
-        /* Removed: .event-entry .ongoing-indicator::before to fix double text bug */
 
         .quote-section {
             background-color: var(--quote-section-bg);
@@ -557,10 +557,39 @@
             }
             
             function createSpecialEventHTML(eventData) {
+                let timeDisplay = '';
+                if (eventData.displayRule.timeStart && eventData.displayRule.timeEnd) {
+                    timeDisplay = `${eventData.displayRule.timeStart} - ${eventData.displayRule.timeEnd}`;
+                } else if (eventData.displayRule.timeStart) {
+                    timeDisplay = `Starts at ${eventData.displayRule.timeStart}`;
+                } else if (eventData.displayRule.eventTime && eventData.displayRule.eventTime !== "All Day") {
+                     timeDisplay = eventData.displayRule.eventTime;
+                } else if (eventData.displayRule.eventTime === "All Day") {
+                     timeDisplay = "All Day";
+                }
+
+
+                let dateDisplay = eventData.displayRule.dayDisplay || eventData.displayRule.date || '';
+                if (eventData.displayRule.type === "dateRange") {
+                    dateDisplay = `Relevant: ${eventData.displayRule.visibleFrom} to ${eventData.displayRule.visibleUntil}`;
+                    if(eventData.displayRule.eventDate) {
+                        dateDisplay += ` (Event on ${eventData.displayRule.eventDate})`;
+                    }
+                } else if (eventData.displayRule.type === "multiDate") {
+                    dateDisplay = `On: ${eventData.displayRule.dates.join(', ')}`;
+                } else if (eventData.displayRule.type === "persistentUntil") {
+                     dateDisplay = `Important until: ${eventData.displayRule.showUntil}`;
+                }
+
+
                 return `
-                    <div class="event-entry" data-event-id="${eventData.id}" data-event-date="${eventData.date}" data-event-time-start="${eventData.timeStart}" data-event-time-end="${eventData.timeEnd}">
-                        <span class="event-date">${eventData.dayDisplay}</span>
-                        <span class="event-time">${eventData.timeStart} - ${eventData.timeEnd}</span>
+                    <div class="event-entry" 
+                         data-event-id="${eventData.id}" 
+                         data-event-date="${eventData.displayRule.date || eventData.displayRule.eventDate || eventData.displayRule.dates?.[0] || ''}"
+                         data-event-time-start="${eventData.displayRule.timeStart || ''}" 
+                         data-event-time-end="${eventData.displayRule.timeEnd || ''}">
+                        <span class="event-date">${dateDisplay}</span>
+                        ${timeDisplay ? `<span class="event-time">${timeDisplay}</span>` : ''}
                         <span class="event-title">${eventData.title}</span>
                         <span class="event-details">${eventData.details}</span>
                         <span class="time-left-indicator"></span> 
@@ -608,19 +637,50 @@
                     specialEventsSection.style.display = 'none';
                     return;
                 }
-                let hasEventsToShow = false;
+                
+                const now = new Date();
+                const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                let hasVisibleEvents = false;
+
                 eventsData.forEach(eventItem => {
-                     const eventDate = new Date(eventItem.date + "T00:00:00");
-                     const now = new Date();
-                     const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                     const tomorrowDateOnly = new Date(todayDateOnly);
-                     tomorrowDateOnly.setDate(todayDateOnly.getDate() + 1);
-                    if(eventDate.getTime() === todayDateOnly.getTime() || eventDate.getTime() === tomorrowDateOnly.getTime()){
+                    if (!eventItem.displayRule) return; 
+
+                    let shouldDisplay = false;
+                    const rule = eventItem.displayRule;
+
+                    switch (rule.type) {
+                        case 'specificDate':
+                            const specificEventDate = new Date(rule.date + "T00:00:00");
+                            if (specificEventDate.getTime() === todayDateOnly.getTime()) {
+                                shouldDisplay = true;
+                            }
+                            break;
+                        case 'dateRange':
+                            const visibleFrom = new Date(rule.visibleFrom + "T00:00:00");
+                            const visibleUntil = new Date(rule.visibleUntil + "T23:59:59"); // End of day
+                            if (todayDateOnly >= visibleFrom && todayDateOnly <= visibleUntil) {
+                                shouldDisplay = true;
+                            }
+                            break;
+                        case 'multiDate':
+                            if (rule.dates && rule.dates.some(dStr => new Date(dStr + "T00:00:00").getTime() === todayDateOnly.getTime())) {
+                                shouldDisplay = true;
+                            }
+                            break;
+                        case 'persistentUntil':
+                            const showUntil = new Date(rule.showUntil + "T23:59:59"); // End of day
+                            if (todayDateOnly <= showUntil) {
+                                shouldDisplay = true;
+                            }
+                            break;
+                    }
+
+                    if (shouldDisplay) {
                         specialEventsContainer.innerHTML += createSpecialEventHTML(eventItem);
-                        hasEventsToShow = true;
+                        hasVisibleEvents = true;
                     }
                 });
-                specialEventsSection.style.display = hasEventsToShow ? 'block' : 'none';
+                specialEventsSection.style.display = hasVisibleEvents ? 'block' : 'none';
                 addTouchTooltipListenersToEvents();
             }
             
@@ -763,12 +823,14 @@
                         itemEndTimeStr = timeRangeParts[1];
                         itemDate = now; 
                     } else { 
-                        const eventDateStr = entry.dataset.eventDate;
+                        const eventDateStr = entry.dataset.eventDate; // This will be the primary date for timer logic
                         itemStartTimeStr = entry.dataset.eventTimeStart;
                         itemEndTimeStr = entry.dataset.eventTimeEnd;
-                        if (!eventDateStr || !itemStartTimeStr || !itemEndTimeStr) return;
+                        if (!eventDateStr || !itemStartTimeStr || !itemEndTimeStr) return; // Needs these for timers
+                        
                         const [year, month, day] = eventDateStr.split('-').map(Number);
                         itemDate = new Date(year, month - 1, day); 
+
                         const todayDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
                         const eventDateOnly = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
                         if (eventDateOnly.getTime() !== todayDateOnly.getTime()) return; 
@@ -825,10 +887,13 @@
             }
             
             function runAllUpdates() {
+                renderSpecialEvents(currentScheduleData.specialEvents); // Re-render to apply date logic
                 updateTimers('.schedule-grid .class-entry', true);
                 updateTimers('.special-events-section .event-entry', false);
             }
             
+            let currentScheduleData = {}; // Store fetched schedule data globally within this scope
+
             Promise.all([
                 fetch('schedule.json').then(res => {
                     if (!res.ok) throw new Error(`Schedule JSON fetch error: ${res.statusText}`);
@@ -837,15 +902,16 @@
                 fetch('quotes.json').then(res => {
                     if (!res.ok) { 
                         console.warn('Quotes JSON not found or fetch error, quotes will not be displayed.');
-                        return []; // Return empty array to prevent further errors
+                        return []; 
                     }
                     return res.json();
-                }).catch(err => { // Catch error specifically for quotes.json
+                }).catch(err => { 
                     console.warn('Error fetching quotes.json:', err.message, '. Quotes will not be displayed.');
-                    return []; // Return empty array if quotes.json fails to load
+                    return []; 
                 })
             ])
             .then(([scheduleAPIData, quotesData]) => {
+                currentScheduleData = scheduleAPIData; // Store for re-rendering special events
                 allMotivationalQuotes = quotesData;
                 populateStaticText(scheduleAPIData.settings);
                 renderSpecialEvents(scheduleAPIData.specialEvents); 
@@ -853,10 +919,10 @@
                 initializeMobileTabs(); 
                 if (allMotivationalQuotes.length > 0) displayRandomQuote(); else if(quoteSectionEl) quoteSectionEl.style.display = 'none';
                 runAllUpdates(); 
-                setInterval(runAllUpdates, 30000);
+                setInterval(runAllUpdates, 30000); 
             })
-            .catch(error => { // This will now primarily catch errors from schedule.json fetching
-                console.error('Error fetching initial data (likely schedule.json):', error);
+            .catch(error => { 
+                console.error('Error fetching initial data:', error);
                 if(scheduleGridContainer) scheduleGridContainer.innerHTML = `<p style="color:red; text-align:center;">Could not load schedule data. Error: ${error.message}. Please try again later.</p>`;
                 if (quoteSectionEl) quoteSectionEl.style.display = 'none';
             });
