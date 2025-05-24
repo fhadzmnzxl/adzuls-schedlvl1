@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Schedule</title> 
+    <!-- <link rel="icon" href="logo.png" type="image/png"> --> {/* Favicon line commented out as per previous discussion */}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -136,9 +137,7 @@
             font-size: 0.65em; 
             padding: 1px 4px; 
         }
-         .event-entry .ongoing-indicator::before {
-            content: "Happening Now"; 
-        }
+        /* Removed: .event-entry .ongoing-indicator::before to fix double text bug */
 
         .quote-section {
             background-color: var(--quote-section-bg);
@@ -178,7 +177,6 @@
             background-color: var(--color-ateneo-blue);
             color: var(--color-text-on-blue);
         }
-
 
         .mobile-tabs-nav {
             display: none;
@@ -838,8 +836,14 @@
                     return res.json();
                 }),
                 fetch('quotes.json').then(res => {
-                    if (!res.ok) throw new Error(`Quotes JSON fetch error: ${res.statusText}`);
+                    if (!res.ok) { 
+                        console.warn('Quotes JSON not found or fetch error, quotes will not be displayed.');
+                        return []; // Return empty array to prevent further errors
+                    }
                     return res.json();
+                }).catch(err => { // Catch error specifically for quotes.json
+                    console.warn('Error fetching quotes.json:', err.message, '. Quotes will not be displayed.');
+                    return []; // Return empty array if quotes.json fails to load
                 })
             ])
             .then(([scheduleAPIData, quotesData]) => {
@@ -848,12 +852,12 @@
                 renderSpecialEvents(scheduleAPIData.specialEvents); 
                 renderSchedule(scheduleAPIData.weeklySchedule);
                 initializeMobileTabs(); 
-                displayRandomQuote(); 
+                if (allMotivationalQuotes.length > 0) displayRandomQuote(); else if(quoteSectionEl) quoteSectionEl.style.display = 'none';
                 runAllUpdates(); 
                 setInterval(runAllUpdates, 30000);
             })
-            .catch(error => {
-                console.error('Error fetching initial data:', error);
+            .catch(error => { // This will now primarily catch errors from schedule.json fetching
+                console.error('Error fetching initial data (likely schedule.json):', error);
                 if(scheduleGridContainer) scheduleGridContainer.innerHTML = `<p style="color:red; text-align:center;">Could not load schedule data. Error: ${error.message}. Please try again later.</p>`;
                 if (quoteSectionEl) quoteSectionEl.style.display = 'none';
             });
